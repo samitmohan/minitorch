@@ -1,0 +1,18 @@
+site_name: MiniTorch
+nav:
+  - Home: index.md
+  - Tutorial: tutorial.md
+  - API:
+      - Tensor: api/tensor.md
+      - Layers: api/layers.md
+      - Losses: api/loss.md
+      - Optimizers: api/optim.md
+theme:
+  name: material
+  palette:
+    scheme: default
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.top
