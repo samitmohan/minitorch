@@ -78,7 +78,8 @@ Make sure you have PyTorch installed (for comparisions)
 pip install torch
 ```
 
-![image](https://i.ibb.co/yBxP8jXj/Screenshot-2025-05-28-at-11-07-15-PM.png)
+![image](https://i.ibb.co/gLG4HMHc/Screenshot-2025-05-28-at-11-19-04-PM.png)
+
 
 Inspired by karpathy and george hotz.
 
