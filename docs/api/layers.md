@@ -26,3 +26,4 @@ y = act(x)
 ## `BatchNorm1d(num_features)`
 
 Batch normalization for 1D features.
+TODO: _backward function

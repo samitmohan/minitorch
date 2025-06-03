@@ -1,18 +1,46 @@
 site_name: MiniTorch
+site_description: A miniature PyTorch-style deep-learning engine built from scratch
+site_author: Samit Mohan
+
+repo_url: https://github.com/samitmohan/minitorch
+repo_name: GitHub
+edit_uri: edit/main/docs
+
 nav:
   - Home: index.md
-  - Tutorial: tutorial.md
+  - Tutorial & Use Cases:
+      - Tutorial: tutorial.md
+      - MNIST Example: mnist_example.md
   - API:
       - Tensor: api/tensor.md
       - Layers: api/layers.md
       - Losses: api/loss.md
       - Optimizers: api/optim.md
+  - Examples:
+      - Toy Regression: ../train.py
+      - MNIST: ../mnist_example.py
+
 theme:
   name: material
   palette:
     scheme: default
     primary: indigo
     accent: indigo
+  font:
+    text: Roboto
+    code: Roboto Mono
   features:
     - navigation.tabs
     - navigation.top
+    - search.highlight
+    - search.suggest
+  language: en
+  favicon: assets/favicon.ico  # (optional; put a favicon in docs/assets/)
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+  - pymdownx.superfences
+  - pymdownx.tabbed

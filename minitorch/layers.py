@@ -3,8 +3,14 @@ from .tensor import Tensor
 
 class Linear:
     def __init__(self, in_features, out_features, bias=True):
-        self.weight = Tensor(np.random.randn(in_features, out_features).astype(np.float32), requires_grad=True)
-        self.bias = Tensor(np.zeros(out_features, dtype=np.float32), requires_grad=True) if bias else None
+        self.weight = Tensor(
+            np.random.randn(in_features, out_features).astype(np.float32),
+            requires_grad=True
+        )
+        self.bias = Tensor(
+            np.zeros(out_features, dtype=np.float32),
+            requires_grad=True
+        ) if bias else None
 
     def __call__(self, x):
         y = x @ self.weight
@@ -42,7 +48,7 @@ class BatchNorm1d:
         x_hat = (x + (mean * -1.0)) * Tensor(1.0 / np.sqrt(var.data + self.eps), requires_grad=False)
         out = x_hat * self.gamma + self.beta
         def _backward():
-            # Simplified; real implementation would be more complex
+            # TODO: full BatchNorm backward for accuracy; left unimplemented for now
             pass
         out._backward, out._prev = _backward, (x, self.gamma, self.beta)
         out._op = 'batchnorm'

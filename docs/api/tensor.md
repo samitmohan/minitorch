@@ -1,6 +1,7 @@
 # Tensor
 
-Core `Tensor` class wrapping a NumPy array with automatic gradient tracking.
+The core `Tensor` class wraps a NumPy array and tracks gradients for backpropagation.
+
 
 ## Key Methods
 

@@ -20,7 +20,7 @@ class SGD:
             p.grad = np.zeros_like(p.data)
 
 class Adam:
-    def __init__(self, params, lr=1e-3, betas=(0.9,0.999), eps=1e-8):
+    def __init__(self, params, lr=1e-3, betas=(0.9, 0.999), eps=1e-8):
         self.params = list(params)
         self.lr = lr
         self.beta1, self.beta2 = betas
