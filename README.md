@@ -134,7 +134,6 @@ https://samitmohan.github.io/minitorch/
 - _backward() for BatchNormalisation
 - Add Images for MNIST & Regression Examples {Graph for loss and accuracy {bar chart of these numbers vs pytorch}}
 - Add /tests in Docs
-- https://samitmohan.github.io/minitorch/
 - Why MiniTorch is slow? Tradeoffs (Add to Docs)
 
 
