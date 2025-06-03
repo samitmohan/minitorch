@@ -1,11 +1,11 @@
 site_name: MiniTorch
 site_description: A miniature PyTorch-style deep-learning engine built from scratch
 site_author: Samit Mohan
+site_url: https://samitmohan.github.io/minitorch/  
 
 repo_url: https://github.com/samitmohan/minitorch
 repo_name: GitHub
 edit_uri: edit/main/docs
-
 nav:
   - Home: index.md
   - Tutorial & Use Cases:
