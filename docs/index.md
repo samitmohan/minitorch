@@ -2,7 +2,7 @@
 
 > A minimalist PyTorch–style deep learning engine built from scratch
 
-![MiniTorch Banner](assets/banner.png){: style="max-width:100%; border-radius:8px;" }
+![MiniTorch Banner](assets/banner.png)
 
 ---
 
@@ -13,30 +13,10 @@ MiniTorch is a **small-footprint** deep‐learning framework implemented entirel
 - **`Tensor`**: a NumPy-backed tensor with full broadcasting and automatic gradient tracking.  
 - **`Linear`, `ReLU`, `BatchNorm1d`**: fundamental layer types.  
 - **Loss functions**: Mean Squared Error (MSE) and Cross-Entropy.  
-- **Optimizers**: SGD (with momentum) and Adam.  
+- **Optimizers**: SGD and Adam.  
 - **Demos**: a toy regression (learn *y = 2x + 1*), a small MNIST example, and benchmarking scripts.
 
 ---
-
-## Installation
-
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/samitmohan/minitorch.git
-   cd minitorch
-
-2. Install MiniTorch and documentation dependencies:
-
-```bash
-pip install -e .
-pip install mkdocs-material streamlit scikit-learn
-```
-
-3. To view the documentation locally:
-```bash
-mkddocs serve
-```
-Then open http://127.0.0.1:8000 in your browser.
 
 ## Quickstart
 
@@ -64,7 +44,6 @@ for epoch in range(5):
     optimizer.step()
     print(f"Epoch {epoch}, Loss {loss.data:.4f}")
 ```
-# MiniTorch
 
 
 

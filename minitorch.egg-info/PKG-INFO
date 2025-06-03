@@ -1,0 +1,7 @@
+Metadata-Version: 2.1
+Name: minitorch
+Version: 0.1.0
+Summary: A miniature PyTorch-like autograd engine built from scratch
+Author: Samit Mohan
+Requires-Dist: numpy
+Requires-Dist: matplotlib

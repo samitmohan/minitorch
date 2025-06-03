@@ -125,9 +125,18 @@ Open http://127.0.0.1:8000 in your browser to see:
 You can also view online at:
 https://samitmohan.github.io/minitorch/
 
-![image](https://i.ibb.co/gLG4HMHc/Screenshot-2025-05-28-at-11-19-04-PM.png)
+![image](https://i.ibb.co/bgyGNtX9/Screenshot-2025-06-04-at-4-11-30-AM.png)
+
 
 **Inspired by Karpathy.**
+
+## TODO
+- _backward() for BatchNormalisation
+- Add Images for MNIST & Regression Examples {Graph for loss and accuracy {bar chart of these numbers vs pytorch}}
+- Add /tests in Docs
+- https://samitmohan.github.io/minitorch/
+- Why MiniTorch is slow? Tradeoffs (Add to Docs)
+
 
 ## License
 
