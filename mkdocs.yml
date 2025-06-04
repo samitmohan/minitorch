@@ -22,6 +22,9 @@ theme:
     scheme: default
     primary: indigo
     accent: indigo
+    toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
   font:
     text: Roboto
     code: Roboto Mono
