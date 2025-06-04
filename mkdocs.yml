@@ -1,53 +1,99 @@
 site_name: MiniTorch
 site_description: A miniature PyTorch-style deep-learning engine built from scratch
 site_author: Samit Mohan
-site_url: https://samitmohan.github.io/minitorch/  
+site_url: https://samitmohan.github.io/minitorch/
 
 repo_url: https://github.com/samitmohan/minitorch
-repo_name: GitHub
-edit_uri: edit/main/docs
+repo_name: samitmohan/minitorch  # Better display
+edit_uri: edit/master/docs  # Match your branch name
+
 nav:
   - Home: index.md
   - Tutorial & Use Cases:
       - Tutorial: tutorial.md
-  - API:
+  - API Reference:  # Cleaner name
       - Tensor: api/tensor.md
       - Layers: api/layers.md
-      - Losses: api/loss.md
+      - Loss Functions: api/loss.md  # More descriptive
       - Optimizers: api/optim.md
 
 theme:
   name: material
   palette:
     # Light mode
-    - scheme: default
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
       primary: indigo
-      accent: indigo
+      accent: deep purple  # Different accent for contrast
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     # Dark mode  
-    - scheme: slate
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
       primary: indigo
-      accent: indigo
+      accent: deep purple
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+        
   font:
     text: Roboto
     code: Roboto Mono
+    
   features:
+    - content.code.copy  # Copy button for code blocks!
+    - content.code.annotate
     - navigation.tabs
+    - navigation.tabs.sticky  # Tabs stay visible when scrolling
     - navigation.top
+    - navigation.footer  # Previous/Next navigation
     - search.highlight
     - search.suggest
-  language: en
-  favicon: assets/favicon.ico 
+    - search.share  # Share search results
+    - toc.follow  # TOC follows scroll position
+    
+  icon:
+    repo: fontawesome/brands/github
+    
+  favicon: assets/favicon.ico
+
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - git-revision-date-localized:  # Shows last modified dates
+      enable_creation_date: true
+      type: timeago
 
 markdown_extensions:
-  - admonition
-  - codehilite
+  - admonition  # Info/warning boxes
+  - attr_list   # Better formatting control
+  - md_in_html  # Mix HTML in markdown
   - toc:
       permalink: true
-  - pymdownx.superfences
-  - pymdownx.tabbed
+      title: On this page
+  - pymdownx.details  # Collapsible sections
+  - pymdownx.highlight:  # Better than codehilite
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite  # Inline code highlighting
+  - pymdownx.superfences:  # Advanced code blocks
+      custom_fences:
+        - name: mermaid  # For diagrams
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:  # Emoji support 🚀
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/samitmohan
+  generator: false  # Remove "Made with Material for MkDocs"
+
+copyright: |
+  &copy; 2024 <a href="https://github.com/samitmohan" target="_blank" rel="noopener">Samit Mohan</a>
