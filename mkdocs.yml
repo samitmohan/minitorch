@@ -9,15 +9,11 @@ edit_uri: edit/master/docs
 
 nav:
   - Home: index.md
-  - Getting Started:
-      - Quickstart: quickstart.md
-      - MNIST Tutorial: mnist.md
   - Tutorial: tutorial.md
   - API Reference:
       - Tensor: api/tensor.md
       - Layers: api/layers.md
       - Loss Functions: api/loss.md 
-      - Elementwise: api/elementwise.md
       - Optimizers: api/optim.md
 
 theme:

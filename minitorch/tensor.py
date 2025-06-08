@@ -123,5 +123,30 @@ class Tensor:
         for node in reversed(topo):
             node._backward()
 
+    def exp(self):
+        out = Tensor(np.exp(self.data), requires_grad=self.requires_grad)
+        def _backward():
+            if self.requires_grad:
+                if self.grad is None: 
+                    self.grad = np.zeros_like(self.data)
+                # d/dx eˣ = eˣ
+                self.grad += out.data * out.grad
+        out._backward = _backward
+        out._prev = {self}
+        out._op = "exp"
+        return out
+
+    def log(self):
+        out = Tensor(np.log(self.data), requires_grad=self.requires_grad)
+        def _backward():
+            if self.requires_grad:
+                if self.grad is None:
+                    self.grad = np.zeros_like(self.data)
+                # d/dx log x = 1/x
+                self.grad += (1.0 / self.data) * out.grad
+        out._backward = _backward
+        out._prev = {self}
+        out._op = "log"
+        return out
     def __repr__(self):
         return f"Tensor(data={self.data}, grad={self.grad})"

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from minitorch.tensor import Tensor
 from minitorch.layers import Linear, ReLU
 from minitorch.loss import mse_loss
-from minitorch.optim import SGD
+from minitorch.optim import SGD, Adam
 
 # learn y = 2x + 1
 np.random.seed(0)

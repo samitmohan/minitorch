@@ -2,7 +2,7 @@ import numpy as np
 from minitorch.tensor import Tensor
 from minitorch.layers import Linear, ReLU
 from minitorch.loss import cross_entropy_loss
-from minitorch.optim import SGD
+from minitorch.optim import SGD, Adam
 
 from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split
@@ -36,7 +36,9 @@ relu = ReLU()
 layer2 = Linear(128, 10)
 
 params = layer1.parameters() + layer2.parameters()
-opt = SGD(params, lr=0.1, momentum=0.9)
+# opt = SGD(params, lr=0.01, momentum=0.9)
+opt = Adam(params, lr=1e-2)
+
 
 epochs = 10
 batch_size = 100
