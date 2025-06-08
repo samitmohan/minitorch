@@ -36,8 +36,8 @@ relu = ReLU()
 layer2 = Linear(128, 10)
 
 params = layer1.parameters() + layer2.parameters()
-# opt = SGD(params, lr=0.01, momentum=0.9)
-opt = Adam(params, lr=1e-2)
+opt = SGD(params, lr=0.01, momentum=0.9)
+# opt = Adam(params, lr=1e-2)
 
 
 epochs = 10

@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def _sum_to_shape(grad: np.ndarray, shape: tuple) -> np.ndarray:
     """
     Sum `grad` over any broadcasted dimensions so that the result
@@ -14,139 +15,175 @@ def _sum_to_shape(grad: np.ndarray, shape: tuple) -> np.ndarray:
             grad = grad.sum(axis=i, keepdims=True)
     return grad.reshape(shape)
 
+
 class Tensor:
-    def __init__(self, data, requires_grad=False):
-        # Wrap numbers, lists, or numpy arrays
+    def __init__(self, data, *, requires_grad=False):
         self.data = np.array(data, dtype=data.dtype if isinstance(data, np.ndarray) else np.float32)
         self.requires_grad = requires_grad
-        self.grad = np.zeros_like(self.data)
+        self.grad = None
         self._backward = lambda: None
-        self._prev = ()
+        self._prev = set()
         self._op = ''
-
-    @staticmethod
-    def zeros(shape, requires_grad=False, dtype=np.float32):
-        return Tensor(np.zeros(shape, dtype=dtype), requires_grad)
-
-    @staticmethod
-    def eye(n, requires_grad=False, dtype=np.float32):
-        return Tensor(np.eye(n, dtype=dtype), requires_grad)
-
-    def reshape(self, *shape):
-        out = Tensor(self.data.reshape(shape), requires_grad=self.requires_grad)
-        def _backward():
-            if self.requires_grad:
-                self.grad += out.grad.reshape(self.data.shape)
-        out._backward, out._prev = _backward, (self,)
-        out._op = 'reshape'
-        return out
-
-    def sum(self, axis=None, keepdims=False):
-        out = Tensor(self.data.sum(axis=axis, keepdims=keepdims),
-                     requires_grad=self.requires_grad)
-        def _backward():
-            if self.requires_grad:
-                grad = out.grad
-                self.grad += np.broadcast_to(grad, self.data.shape)
-        out._backward, out._prev = _backward, (self,)
-        out._op = 'sum'
-        return out
 
     def __add__(self, other):
         other = other if isinstance(other, Tensor) else Tensor(other)
-        out = Tensor(self.data + other.data,
-                     requires_grad=self.requires_grad or other.requires_grad)
+        out = Tensor(self.data + other.data, requires_grad=self.requires_grad or other.requires_grad)
+
         def _backward():
             if self.requires_grad:
-                grad_self = out.grad
-                if self.data.shape != out.data.shape:
-                    grad_self = _sum_to_shape(out.grad, self.data.shape)
+                grad_self = _sum_to_shape(out.grad, self.data.shape)
+                if self.grad is None:
+                    self.grad = np.zeros_like(self.data)
                 self.grad += grad_self
             if other.requires_grad:
-                grad_other = out.grad
-                if other.data.shape != out.data.shape:
-                    grad_other = _sum_to_shape(out.grad, other.data.shape)
+                grad_other = _sum_to_shape(out.grad, other.data.shape)
+                if other.grad is None:
+                    other.grad = np.zeros_like(other.data)
                 other.grad += grad_other
-        out._backward, out._prev, out._op = _backward, (self, other), 'add'
-        return out
 
-    def __radd__(self, other):
-        return self + other
+        out._backward = _backward
+        out._prev = {self, other}
+        out._op = 'add'
+        return out
 
     def __mul__(self, other):
         other = other if isinstance(other, Tensor) else Tensor(other)
-        out = Tensor(self.data * other.data,
-                     requires_grad=self.requires_grad or other.requires_grad)
+        out = Tensor(self.data * other.data, requires_grad=self.requires_grad or other.requires_grad)
+
         def _backward():
             if self.requires_grad:
-                grad_self = other.data * out.grad
-                if self.data.shape != out.data.shape:
-                    grad_self = _sum_to_shape(grad_self, self.data.shape)
+                grad_self = _sum_to_shape(other.data * out.grad, self.data.shape)
+                if self.grad is None:
+                    self.grad = np.zeros_like(self.data)
                 self.grad += grad_self
             if other.requires_grad:
-                grad_other = self.data * out.grad
-                if other.data.shape != out.data.shape:
-                    grad_other = _sum_to_shape(grad_other, other.data.shape)
+                grad_other = _sum_to_shape(self.data * out.grad, other.data.shape)
+                if other.grad is None:
+                    other.grad = np.zeros_like(other.data)
                 other.grad += grad_other
-        out._backward, out._prev, out._op = _backward, (self, other), 'mul'
+
+        out._backward = _backward
+        out._prev = {self, other}
+        out._op = 'mul'
         return out
-
-    def __neg__(self):
-        return self * -1.0
-
-    def __rmul__(self, other):
-        return self * other
 
     def __matmul__(self, other):
-        other = other if isinstance(other, Tensor) else Tensor(other)
-        out_data = self.data @ other.data
-        out = Tensor(out_data, requires_grad=self.requires_grad or other.requires_grad)
+        out = Tensor(self.data @ other.data, requires_grad=self.requires_grad or other.requires_grad)
+
         def _backward():
             if self.requires_grad:
-                self.grad += out.grad @ other.data.T
+                grad_self = out.grad @ other.data.T
+                if self.grad is None:
+                    self.grad = np.zeros_like(self.data)
+                self.grad += grad_self
             if other.requires_grad:
-                other.grad += self.data.T @ out.grad
-        out._backward, out._prev, out._op = _backward, (self, other), 'matmul'
+                grad_other = self.data.T @ out.grad
+                if other.grad is None:
+                    other.grad = np.zeros_like(other.data)
+                other.grad += grad_other
+
+        out._backward = _backward
+        out._prev = {self, other}
+        out._op = 'matmul'
         return out
 
-    def backward(self):
-        topo, visited = [], set()
-        def build(v):
-            if v not in visited:
-                visited.add(v)
-                for parent in v._prev:
-                    build(parent)
-                topo.append(v)
-        build(self)
+    def sum(self, axis=None, keepdims=False):
+        data = self.data.sum(axis=axis, keepdims=keepdims)
+        out = Tensor(data, requires_grad=self.requires_grad)
 
-        self.grad = np.ones_like(self.data)
-        for node in reversed(topo):
-            node._backward()
+        def _backward():
+            if self.requires_grad:
+                grad_self = out.grad
+                # Broadcast back to original shape
+                grad_self = np.broadcast_to(grad_self, self.data.shape)
+                if self.grad is None:
+                    self.grad = np.zeros_like(self.data)
+                self.grad += grad_self
+
+        out._backward = _backward
+        out._prev = {self}
+        out._op = 'sum'
+        return out
+
+    def reshape(self, *shape):
+        data = self.data.reshape(*shape)
+        out = Tensor(data, requires_grad=self.requires_grad)
+
+        def _backward():
+            if self.requires_grad:
+                grad_self = out.grad.reshape(self.data.shape)
+                if self.grad is None:
+                    self.grad = np.zeros_like(self.data)
+                self.grad += grad_self
+
+        out._backward = _backward
+        out._prev = {self}
+        out._op = 'reshape'
+        return out
 
     def exp(self):
         out = Tensor(np.exp(self.data), requires_grad=self.requires_grad)
+
         def _backward():
             if self.requires_grad:
-                if self.grad is None: 
+                grad_self = out.data * out.grad
+                if self.grad is None:
                     self.grad = np.zeros_like(self.data)
-                # d/dx eˣ = eˣ
-                self.grad += out.data * out.grad
+                self.grad += grad_self
+
         out._backward = _backward
         out._prev = {self}
-        out._op = "exp"
+        out._op = 'exp'
         return out
 
     def log(self):
         out = Tensor(np.log(self.data), requires_grad=self.requires_grad)
+
         def _backward():
             if self.requires_grad:
+                grad_self = (1.0 / self.data) * out.grad
                 if self.grad is None:
                     self.grad = np.zeros_like(self.data)
-                # d/dx log x = 1/x
-                self.grad += (1.0 / self.data) * out.grad
+                self.grad += grad_self
+
         out._backward = _backward
         out._prev = {self}
-        out._op = "log"
+        out._op = 'log'
         return out
+
+    def __neg__(self):
+        # Unary negation
+        return self * -1
+
+    def backward(self):
+        # Initialize root gradient for scalar outputs
+        if self.grad is None:
+            self.grad = np.ones_like(self.data)
+
+        topo = []
+        visited = set()
+        def build(v):
+            if v not in visited:
+                visited.add(v)
+                for child in v._prev:
+                    build(child)
+                topo.append(v)
+        build(self)
+
+        for node in reversed(topo):
+            node._backward()
+
+    def zero_grad(self):
+        """Clears the gradient of this tensor."""
+        self.grad = None
+
+    def detach(self):
+        """Returns a new Tensor with the same data but no gradient history."""
+        return Tensor(self.data.copy(), requires_grad=False)
+
+    def clone(self):
+        """Returns a copy of this Tensor, preserving requires_grad."""
+        return Tensor(self.data.copy(), requires_grad=self.requires_grad)
+
     def __repr__(self):
         return f"Tensor(data={self.data}, grad={self.grad})"

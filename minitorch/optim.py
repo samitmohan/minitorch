@@ -28,7 +28,7 @@ class SGD(Optimizer):
             if not getattr(p, "requires_grad", False):
                 continue
 
-            grad = p.grad
+            grad = p.grad 
             # optional L2 regularization
             if self.weight_decay:
                 grad = grad + self.weight_decay * p.data
@@ -56,7 +56,7 @@ class Adam(Optimizer):
             if not getattr(p, "requires_grad", False):
                 continue
 
-            grad = p.grad
+            grad = p.grad 
             # optional L2 regularization
             if self.weight_decay:
                 grad = grad + self.weight_decay * p.data
