@@ -1,3 +1,4 @@
+[![Build Status](https://github.com/samitmohan/minitorch/actions/workflows/ci.yml/badge.svg)](https://github.com/samitmohan/minitorch/actions)
 # Getting Started
 
 > A minimalist PyTorch–style deep learning engine built from scratch
