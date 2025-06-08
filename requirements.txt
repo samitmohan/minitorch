@@ -1,5 +1,6 @@
 numpy
 matplotlib
 mkdocs-material
-torch
+torch torchvision torchaudio
 scikit-learn
+pandas

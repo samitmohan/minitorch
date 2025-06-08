@@ -91,6 +91,9 @@ class Tensor:
         out._backward, out._prev, out._op = _backward, (self, other), 'mul'
         return out
 
+    def __neg__(self):
+        return self * -1.0
+
     def __rmul__(self, other):
         return self * other
 

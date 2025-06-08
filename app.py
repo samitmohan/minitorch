@@ -7,10 +7,7 @@ from minitorch.optim import SGD, Adam
 
 st.set_page_config(page_title="MiniTorch Playground", layout="centered")
 
-st.title("MiniTorch Interactive Playground")
-st.write("Explore MiniTorch operations, autograd, and training via a simple UI.")
-
-# Section: Tensor Operations
+st.title("MiniTorch Demo")
 st.header("Tensor Operations")
 x_val = st.number_input("Enter a scalar value for x:", value=2.0)
 x = Tensor(x_val, requires_grad=True)
@@ -21,18 +18,14 @@ st.write(f"Gradient dy/dx = {x.grad}")
 
 st.markdown("---")
 
-# Section: Neural Network Regression Demo
-st.header("Train a Tiny Linear Model (y=2x+1)")
-# Generate synthetic data
+st.header("Train a Linear Model (y=2x+1)")
 np.random.seed(0)
 x_np = np.random.rand(100, 1).astype(np.float32)
 y_np = 2 * x_np + 1 + 0.1 * np.random.randn(100, 1).astype(np.float32)
 
-# Convert to MiniTorch Tensors
 x_t = Tensor(x_np, requires_grad=False)
 y_t = Tensor(y_np, requires_grad=False)
 
-# Model selection
 model_type = st.selectbox("Optimizer:", ["SGD", "Adam"])
 lr = st.slider("Learning rate:", 0.001, 0.5, 0.1)
 epochs = st.slider("Epochs:", 10, 200, 100)
@@ -41,7 +34,6 @@ model = Linear(1, 1)
 params = model.parameters()
 opt = SGD(params, lr=lr) if model_type == "SGD" else Adam(params, lr=lr)
 
-# Train button
 if st.button("Train Model"):
     loss_history = []
     for epoch in range(epochs):

@@ -1,13 +1,12 @@
 import sys
 import numpy as np
 
-# Prepend project root to path so `minitorch` imports work
+# project root to path so `minitorch` imports work
 sys.path.insert(0, "")
 
 from minitorch.tensor import Tensor
 
 def test_autograd():
-    # Test simple scalar addition/multiplication
     x = Tensor(np.array(3.0), requires_grad=True)
     y = Tensor(np.array(4.0), requires_grad=True)
     c = x * y + x
@@ -15,7 +14,6 @@ def test_autograd():
     assert x.grad == 4.0 + 1.0  # dc/dx = y + 1
     assert y.grad == 3.0        # dc/dy = x
 
-    # Test broadcasting add
     a = Tensor(np.array([2.0, 3.0]), requires_grad=True)
     b = Tensor(np.array([[1.0], [1.0]]), requires_grad=True)
     d = a + b  # shapes: (2,) + (2,1) → (2,2)

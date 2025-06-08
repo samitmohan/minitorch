@@ -4,54 +4,66 @@ site_author: Samit Mohan
 site_url: https://samitmohan.github.io/minitorch/
 
 repo_url: https://github.com/samitmohan/minitorch
-repo_name: samitmohan/minitorch  # Better display
-edit_uri: edit/master/docs  # Match your branch name
+repo_name: samitmohan/minitorch 
+edit_uri: edit/master/docs 
 
 nav:
   - Home: index.md
-  - Tutorial & Use Cases:
-      - Tutorial: tutorial.md
-  - API Reference:  # Cleaner name
+  - Getting Started:
+      - Quickstart: quickstart.md
+      - MNIST Tutorial: mnist.md
+  - Tutorial: tutorial.md
+  - API Reference:
       - Tensor: api/tensor.md
       - Layers: api/layers.md
-      - Loss Functions: api/loss.md  # More descriptive
+      - Loss Functions: api/loss.md 
+      - Elementwise: api/elementwise.md
       - Optimizers: api/optim.md
 
 theme:
   name: material
   palette:
-    # Light mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
     - media: "(prefers-color-scheme: light)"
       scheme: default
-      primary: indigo
-      accent: deep purple  # Different accent for contrast
+      accent: lime
+      primary: black
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
-    # Dark mode  
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
-      primary: indigo
-      accent: deep purple
+      accent: lime
+      primary: black
       toggle:
         icon: material/brightness-4
-        name: Switch to light mode
+        name: Switch to system preference
         
   font:
     text: Roboto
     code: Roboto Mono
     
   features:
-    - content.code.copy  # Copy button for code blocks!
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
     - content.code.annotate
-    - navigation.tabs
-    - navigation.tabs.sticky  # Tabs stay visible when scrolling
+    - content.code.copy
+    - content.tooltips
+    - navigation.footer
+    - navigation.indexes
+    - navigation.sections
+    - navigation.expand
     - navigation.top
-    - navigation.footer  # Previous/Next navigation
+    - navigation.path
     - search.highlight
     - search.suggest
-    - search.share  # Share search results
-    - toc.follow  # TOC follows scroll position
+    - toc.follow
+    - toc.integrate
+    - search.share 
     
   icon:
     repo: fontawesome/brands/github
@@ -61,39 +73,41 @@ theme:
 plugins:
   - search:
       separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
-  - git-revision-date-localized:  # Shows last modified dates
+  - git-revision-date-localized:
       enable_creation_date: true
       type: timeago
 
 markdown_extensions:
-  - admonition  # Info/warning boxes
-  - attr_list   # Better formatting control
-  - md_in_html  # Mix HTML in markdown
+  - attr_list
+  - admonition
+  - footnotes
+  - md_in_html
   - toc:
-      permalink: true
-      title: On this page
-  - pymdownx.details  # Collapsible sections
-  - pymdownx.highlight:  # Better than codehilite
-      anchor_linenums: true
-      line_spans: __span
-      pygments_lang_class: true
-  - pymdownx.inlinehilite  # Inline code highlighting
-  - pymdownx.superfences:  # Advanced code blocks
-      custom_fences:
-        - name: mermaid  # For diagrams
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.emoji:  # Emoji support 🚀
+      permalink: "¤"
+  - pymdownx.details
+  - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      pygments_lang_class: true
+      anchor_linenums: true
+      line_spans: __span
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
 
 extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/samitmohan
-  generator: false  # Remove "Made with Material for MkDocs"
+  generator: false  
 
 copyright: |
   &copy; 2024 <a href="https://github.com/samitmohan" target="_blank" rel="noopener">Samit Mohan</a>

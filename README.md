@@ -35,7 +35,7 @@ pip install -e .
 
 ## Demo
 
-**Toy Regression**
+**Regression**
 
 - This script will:
 	- Generate 100 random (x, y) pairs with noise.
@@ -86,7 +86,6 @@ pip install torch
 
 ## TODO
 - _backward() for BatchNormalisation
-- Add Images for MNIST & Regression Examples {Graph for loss and accuracy {bar chart of these numbers vs pytorch}}
 - Add /tests in Docs
 - Why MiniTorch is slow? Tradeoffs (Add to Docs)
 

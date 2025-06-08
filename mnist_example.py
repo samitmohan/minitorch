@@ -12,7 +12,6 @@ mnist = fetch_openml('mnist_784', version=1)
 X = mnist.data.astype(np.float32) / 255.0
 y = mnist.target.astype(np.int64)
 
-# Use only 1,000 training samples and 200 test samples
 X_train_all, X_test_all, y_train_all, y_test_all = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
@@ -43,7 +42,7 @@ epochs = 10
 batch_size = 100
 num_batches = X_train.shape[0] // batch_size
 
-print("Training on MNIST subset...")
+print("Training")
 for epoch in range(epochs):
     epoch_loss = 0.0
     for i in range(num_batches):
