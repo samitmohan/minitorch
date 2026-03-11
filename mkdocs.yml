@@ -9,12 +9,17 @@ edit_uri: edit/master/docs
 
 nav:
   - Home: index.md
+  - How It Works: how-it-works.md
+  - Performance: performance.md
   - Tutorial: tutorial.md
   - API Reference:
       - Tensor: api/tensor.md
+      - Module: api/module.md
       - Layers: api/layers.md
-      - Loss Functions: api/loss.md 
+      - Loss Functions: api/loss.md
       - Optimizers: api/optim.md
+      - DataLoader: api/data.md
+      - Gradient Checking: api/grad_check.md
 
 theme:
   name: material
@@ -92,7 +97,11 @@ markdown_extensions:
   - pymdownx.magiclink
   - pymdownx.snippets:
       check_paths: true
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.tasklist:
@@ -106,4 +115,4 @@ extra:
   generator: false  
 
 copyright: |
-  &copy; 2024 <a href="https://github.com/samitmohan" target="_blank" rel="noopener">Samit Mohan</a>
+  &copy; 2025 <a href="https://github.com/samitmohan" target="_blank" rel="noopener">Samit Mohan</a>

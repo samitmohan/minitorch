@@ -1,94 +1,51 @@
 # MiniTorch
 
-A minimalist PyTorch-like deep learning engine built from scratch.  
-[Link](https://samitmohan.github.io/minitorch/)
+A PyTorch clone I built from scratch to understand how autograd and neural networks work under the hood.
 
-![image](https://i.ibb.co/bgyGNtX9/Screenshot-2025-06-04-at-4-11-30-AM.png)
-## Features
+[Docs](https://samitmohan.github.io/minitorch/)
 
-- **`Tensor`**: NumPy-backed arrays with full broadcasting, `.grad`, and `.backward()`.  
-- **Layers**:  
-  - `Linear(in_features, out_features, bias=True)`  
-  - `ReLU()`  
-  - `BatchNorm1d(num_features)` (forward only; backward is a placeholder)  
-- **Losses**:  
-  - `mse_loss(input, target)`  
-  - `cross_entropy_loss(input, target)`  
-- **Optimizers**:  
-  - `SGD(params, lr, momentum=0.0)`  
-  - `Adam(params, lr, betas=(0.9,0.999), eps=1e-8)`  
-- **Demos & Examples**:  
-  - **Toy Regression** (`train.py`) to fit *y = 2x + 1* (with loss plot).  
-  - **MNIST Example** (`mnist_example.py`): small MLP on MNIST subset.  
-  - **Benchmark** (`benchmark.py`): compare MiniTorch, NumPy, and PyTorch runtimes.  
-  - **Autograd Tests** (`test_cases.py`): ensure gradient correctness and broadcasting.
+[![CI](https://github.com/samitmohan/minitorch/actions/workflows/ci.yml/badge.svg)](https://github.com/samitmohan/minitorch/actions/workflows/ci.yml)
 
-## Installation
+## What's in here
 
-Clone this repo and install.
+- Reverse-mode autograd with topological sort
+- Tensor with broadcasting, slicing, reductions
+- Module system (parameters, train/eval, state_dict)
+- Layers: Linear (kaiming/xavier init), Conv2d, MaxPool2d, BatchNorm1d, Dropout, ReLU, Sigmoid, Tanh, Softmax
+- SGD (with momentum) and Adam optimizers
+- LR schedulers: StepLR, CosineAnnealingLR
+- Cross-entropy, MSE, and binary cross-entropy loss
+- Computation graph visualization with graphviz
+- DataLoader, gradient clipping, numerical gradient checking
+- Optional CUDA via CuPy
+
+## Setup
 
 ```bash
 git clone https://github.com/samitmohan/minitorch.git
 cd minitorch
-pip install -e .
+uv pip install -e .
 ```
 
-## Demo
-
-**Regression**
-
-- This script will:
-	- Generate 100 random (x, y) pairs with noise.
-	- Train a single Linear(1,1) model for 100 epochs.
-	- Print elapsed training time and final MSE loss.
-	- Display a plot of loss over epochs.
-
-**MNIST**
-
-- This demo:
-	- Fetches the MNIST dataset (using sklearn.datasets.fetch_openml).
-	- Uses 1,000 training samples and 200 test samples.
-	- Builds a 2‐layer MLP (784 → 128 → 10) with ReLU activation.
-	- Trains for 10 epochs with SGD (momentum).
-	- Reports average loss per epoch and final test accuracy.
-
-Run:
+## Run
 
 ```bash
-python train.py
-python mnist_example.py
+# regression demo
+uv run python train.py
+
+# MNIST
+uv run python mnist_example.py --model mlp --epochs 15
+uv run python mnist_example.py --model cnn --epochs 10 --n-train 2000
+
+# tests
+uv run --extra dev pytest tests/ -v
+
+# streamlit playground
+uv run --extra app streamlit run app.py
+
+# docs
+uv run --extra docs mkdocs serve
 ```
-
-To see training loss and final test accuracy.
-
-## Benchmarking
-
-You can benchmark MiniTorch against pure NumPy and PyTorch implementations using the provided `benchmark.py` script:
-
-```bash
-python benchmark.py
-```
-
-Example results (your times may vary):
-
-```
-Benchmark results for 100 epochs on 100 samples:
-  MiniTorch: 0.0251s
-    NumPy: 0.0123s
-  PyTorch: 0.0056s
-```
-
-Make sure you have PyTorch installed (for comparisions)
-
-```bash
-pip install torch
-```
-
-## TODO
-- _backward() for BatchNormalisation
-- Add /tests in Docs
-- Why MiniTorch is slow? Tradeoffs (Add to Docs)
-
 
 ## License
 

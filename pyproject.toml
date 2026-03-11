@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "minitorch"
+version = "0.2.0"
+description = "A miniature PyTorch-like autograd engine built from scratch"
+authors = [{name = "Samit Mohan"}]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "scikit-learn",
+]
+
+[project.optional-dependencies]
+cuda = ["cupy-cuda12x"]
+viz = ["graphviz"]
+dev = [
+    "pytest",
+    "pytest-xdist",
+]
+docs = [
+    "mkdocs-material",
+    "mkdocs-git-revision-date-localized-plugin",
+]
+app = [
+    "streamlit",
+    "pandas",
+]
+all = ["minitorch[cuda,dev,docs,app,viz]"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

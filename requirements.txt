@@ -1,6 +1,0 @@
-numpy
-matplotlib
-mkdocs-material
-torch torchvision torchaudio
-scikit-learn
-pandas

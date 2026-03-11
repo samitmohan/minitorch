@@ -1,45 +1,35 @@
-# Regression Train
+"""Learn y = 2x + 1 with a single Linear layer."""
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-from minitorch.tensor import Tensor
-from minitorch.layers import Linear, ReLU
-from minitorch.loss import mse_loss
-from minitorch.optim import SGD, Adam
+from minitorch import Tensor, Sequential, Linear, SGD, mse_loss
 
-# learn y = 2x + 1
 np.random.seed(0)
 x_np = np.random.rand(100, 1).astype(np.float32)
 y_np = 2 * x_np + 1 + 0.1 * np.random.randn(100, 1).astype(np.float32)
 
-x = Tensor(x_np, requires_grad=False)
-y = Tensor(y_np, requires_grad=False)
+x = Tensor(x_np)
+y = Tensor(y_np)
 
-model = [Linear(1, 1)]
-params = []
-for layer in model:
-    params += layer.parameters()
-
-optimizer = SGD(params, lr=0.1, momentum=0.9)
+model = Sequential(Linear(1, 1))
+optimizer = SGD(model.parameters(), lr=0.1, momentum=0.9)
 
 loss_history = []
 start = time.perf_counter()
 for epoch in range(100):
-    # forward
-    y_pred = model[0](x)
-    loss = mse_loss(y_pred, y)
-    # backward
+    pred = model(x)
+    loss = mse_loss(pred, y)
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-    loss_history.append(loss.data)
-end = time.perf_counter()
+    loss_history.append(float(loss.data))
+elapsed = time.perf_counter() - start
 
-print(f"Training time: {end - start:.4f}s")
+print(f"Training time: {elapsed:.4f}s")
 print(f"Final loss: {loss_history[-1]:.4f}")
 
 plt.plot(loss_history)
-plt.title('Training Loss')
-plt.xlabel('Epoch')
-plt.ylabel('MSE Loss')
+plt.title("Training Loss")
+plt.xlabel("Epoch")
+plt.ylabel("MSE Loss")
 plt.show()
