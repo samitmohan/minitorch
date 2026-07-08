@@ -1,7 +1,9 @@
 """Benchmark MiniTorch vs NumPy vs PyTorch on simple linear regression."""
 import time
+
 import numpy as np
-from minitorch import Tensor, Linear, SGD, mse_loss
+
+from minitorch import SGD, Linear, Tensor, mse_loss
 
 
 def benchmark_minitorch(x_np, y_np, epochs=100):

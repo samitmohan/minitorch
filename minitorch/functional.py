@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 from .tensor import Tensor, _accum_grad
 
@@ -44,6 +46,14 @@ def tanh(x):
     out._prev = {x}
     out._op = 'tanh'
     return out
+
+
+def gelu(x):
+    # tanh approximation (same one GPT-2 uses); built from tensor ops so autograd
+    # differentiates it for free
+    c = math.sqrt(2.0 / math.pi)
+    inner = (x + x ** 3 * 0.044715) * c
+    return x * 0.5 * (tanh(inner) + 1.0)
 
 
 def softmax(x, axis=-1):

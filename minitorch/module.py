@@ -2,6 +2,18 @@ import numpy as np
 from .tensor import Tensor
 
 
+def _dedup(params):
+    # drop tensors that appear more than once (e.g. tied weights) so optimizers
+    # don't build duplicate state or step them twice, keeping first-seen order
+    seen = set()
+    out = []
+    for p in params:
+        if id(p) not in seen:
+            seen.add(id(p))
+            out.append(p)
+    return out
+
+
 class Module:
     def __init__(self):
         self._training = True
@@ -25,7 +37,7 @@ class Module:
                         params.append(item)
                     elif isinstance(item, Module):
                         params.extend(item.parameters())
-        return params
+        return _dedup(params)
 
     def train(self):
         self._training = True
@@ -47,6 +59,16 @@ class Module:
                 for item in val:
                     if isinstance(item, Module):
                         item.eval()
+        return self
+
+    def save(self, path):
+        """Write all parameters to a .npz file."""
+        np.savez(path, **self.state_dict())
+
+    def load(self, path):
+        """Load parameters from a .npz file written by save()."""
+        with np.load(path) as data:
+            self.load_state_dict({k: data[k] for k in data.files})
         return self
 
     def state_dict(self):
@@ -104,7 +126,7 @@ class Sequential(Module):
         for layer in self.layers:
             if hasattr(layer, 'parameters'):
                 params.extend(layer.parameters())
-        return params
+        return _dedup(params)
 
     def train(self):
         self._training = True

@@ -10,6 +10,7 @@ edit_uri: edit/master/docs
 nav:
   - Home: index.md
   - How It Works: how-it-works.md
+  - Transformer: transformer.md
   - Performance: performance.md
   - Tutorial: tutorial.md
   - API Reference:

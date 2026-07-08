@@ -214,10 +214,14 @@ class Tensor:
         out = Tensor(self.data @ other.data, requires_grad=self._should_track(other))
 
         def _backward():
+            # swapaxes(-1, -2) transposes the matrix dims while keeping batch dims,
+            # so this works for 2D and batched (broadcasted) matmuls alike.
             if self.requires_grad:
-                _accum_grad(self, out.grad @ other.data.T)
+                grad = out.grad @ other.data.swapaxes(-1, -2)
+                _accum_grad(self, _sum_to_shape(grad, self.data.shape))
             if other.requires_grad:
-                _accum_grad(other, self.data.T @ out.grad)
+                grad = self.data.swapaxes(-1, -2) @ out.grad
+                _accum_grad(other, _sum_to_shape(grad, other.data.shape))
 
         out._backward = _backward
         out._prev = {self, other}
@@ -452,15 +456,22 @@ class Tensor:
         if self.grad is None:
             self.grad = np.ones_like(self.data)
 
+        # iterative post-order DFS so deep graphs don't blow the recursion limit
         topo = []
         visited = set()
-        def build(v):
-            if v not in visited:
-                visited.add(v)
-                for child in v._prev:
-                    build(child)
-                topo.append(v)
-        build(self)
+        stack = [(self, False)]
+        while stack:
+            node, processed = stack.pop()
+            if processed:
+                topo.append(node)
+                continue
+            if node in visited:
+                continue
+            visited.add(node)
+            stack.append((node, True))
+            for child in node._prev:
+                if child not in visited:
+                    stack.append((child, False))
 
         for node in reversed(topo):
             node._backward()

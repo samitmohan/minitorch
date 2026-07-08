@@ -20,6 +20,7 @@ viz = ["graphviz"]
 dev = [
     "pytest",
     "pytest-xdist",
+    "torch",
 ]
 docs = [
     "mkdocs-material",

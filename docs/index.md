@@ -107,8 +107,8 @@ uv run --extra dev pytest tests/test_gradients.py -v
 # just tensor ops
 uv run --extra dev pytest tests/test_tensor_ops.py -v
 
-# legacy sanity check
-uv run python test_cases.py
+# gradient parity against PyTorch
+uv run --extra dev pytest tests/test_torch_parity.py -v
 ```
 
 ---

@@ -24,7 +24,8 @@ class Linear(Module):
         ) if bias else None
 
     def forward(self, x):
-        assert x.data.ndim == 2, f"Linear expects 2D input (batch, features), got {x.data.ndim}D"
+        assert x.data.shape[-1] == self.weight.data.shape[0], \
+            f"Linear expects last dim {self.weight.data.shape[0]}, got {x.data.shape[-1]}"
         y = x @ self.weight
         if self.bias is not None:
             y = y + self.bias
@@ -53,6 +54,45 @@ class Softmax(Module):
 
     def forward(self, x):
         return F.softmax(x, axis=self.axis)
+
+
+class GELU(Module):
+    def forward(self, x):
+        return F.gelu(x)
+
+
+class LayerNorm(Module):
+    """Normalize over the last dimension. Works on any (..., num_features) input."""
+    def __init__(self, num_features, eps=1e-5):
+        super().__init__()
+        assert num_features > 0, "num_features must be positive"
+        self.gamma = Tensor(np.ones(num_features, dtype=np.float32), requires_grad=True)
+        self.beta = Tensor(np.zeros(num_features, dtype=np.float32), requires_grad=True)
+        self.eps = eps
+
+    def forward(self, x):
+        assert x.data.shape[-1] == self.gamma.data.size, \
+            f"LayerNorm expects last dim {self.gamma.data.size}, got {x.data.shape[-1]}"
+        mean = x.mean(axis=-1, keepdims=True)
+        diff = x - mean
+        var = (diff ** 2).mean(axis=-1, keepdims=True)
+        x_hat = diff / (var + self.eps) ** 0.5
+        return x_hat * self.gamma + self.beta
+
+
+class Embedding(Module):
+    """Lookup table mapping integer ids to dense vectors."""
+    def __init__(self, num_embeddings, embed_dim):
+        super().__init__()
+        assert num_embeddings > 0 and embed_dim > 0, "sizes must be positive"
+        self.weight = Tensor(
+            (np.random.randn(num_embeddings, embed_dim) * 0.02).astype(np.float32),
+            requires_grad=True
+        )
+
+    def forward(self, idx):
+        # idx is a numpy int array of any shape; getitem scatters grad back on backward
+        return self.weight[np.asarray(idx)]
 
 
 class Dropout(Module):
