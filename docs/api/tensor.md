@@ -1,6 +1,6 @@
 # Tensor
 
-The core `Tensor` class wraps a NumPy (or CuPy) array and tracks gradients for backpropagation.
+The core `Tensor` class wraps a NumPy array and tracks gradients for backpropagation.
 
 ## Constructor
 
@@ -12,7 +12,6 @@ Tensor(data, requires_grad=False)
 
 - `shape`, `ndim`, `dtype` - standard array properties
 - `T` - transpose (swaps last two dims)
-- `device` - `"cpu"` or `"cuda"`
 - `size(dim=None)` - total elements or size of a specific dimension
 
 ## Static Constructors
@@ -20,7 +19,7 @@ Tensor(data, requires_grad=False)
 ```python
 Tensor.zeros(2, 3)
 Tensor.ones(2, 3, requires_grad=True)
-Tensor.randn(4, 5, device="cuda")
+Tensor.randn(4, 5)
 Tensor.eye(3)
 ```
 
@@ -48,13 +47,6 @@ Tensor.eye(3)
 
 - `backward()` - reverse-mode autodiff (scalar tensors only)
 - `zero_grad()`, `detach()`, `clone()`
-
-## Device Transfer
-
-```python
-x = Tensor.randn(3, 4)
-x_gpu = x.to("cuda")
-```
 
 ## no_grad Context Manager
 

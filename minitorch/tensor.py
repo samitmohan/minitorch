@@ -1,5 +1,4 @@
 import numpy as np
-from .backend import get_array_module, to_device, gpu_available
 
 # global flag for no_grad context
 _grad_enabled = True
@@ -40,8 +39,6 @@ class Tensor:
             self.data = data if data.dtype in (np.float32, np.float64) else data.astype(np.float32)
         elif isinstance(data, np.floating):
             self.data = np.array(data, dtype=data.dtype)
-        elif gpu_available() and hasattr(data, '__cuda_array_interface__'):
-            self.data = data if data.dtype in (np.float32, np.float64) else data.astype(np.float32)
         else:
             self.data = np.array(data, dtype=np.float32)
         self.requires_grad = requires_grad and _grad_enabled
@@ -68,44 +65,28 @@ class Tensor:
     def T(self):
         return self.transpose()
 
-    @property
-    def device(self):
-        xp = get_array_module(self.data)
-        return "cuda" if xp is not np else "cpu"
-
     def size(self, dim=None):
         if dim is None:
             return self.data.size
         return self.data.shape[dim]
 
-    def to(self, device):
-        new_data = to_device(self.data, device)
-        t = Tensor(new_data, requires_grad=self.requires_grad)
-        if self.grad is not None:
-            t.grad = to_device(self.grad, device)
-        return t
-
     # static constructors
 
     @staticmethod
-    def zeros(*shape, requires_grad=False, device="cpu"):
-        t = Tensor(np.zeros(shape, dtype=np.float32), requires_grad=requires_grad)
-        return t.to(device) if device != "cpu" else t
+    def zeros(*shape, requires_grad=False):
+        return Tensor(np.zeros(shape, dtype=np.float32), requires_grad=requires_grad)
 
     @staticmethod
-    def ones(*shape, requires_grad=False, device="cpu"):
-        t = Tensor(np.ones(shape, dtype=np.float32), requires_grad=requires_grad)
-        return t.to(device) if device != "cpu" else t
+    def ones(*shape, requires_grad=False):
+        return Tensor(np.ones(shape, dtype=np.float32), requires_grad=requires_grad)
 
     @staticmethod
-    def randn(*shape, requires_grad=False, device="cpu"):
-        t = Tensor(np.random.randn(*shape).astype(np.float32), requires_grad=requires_grad)
-        return t.to(device) if device != "cpu" else t
+    def randn(*shape, requires_grad=False):
+        return Tensor(np.random.randn(*shape).astype(np.float32), requires_grad=requires_grad)
 
     @staticmethod
-    def eye(n, requires_grad=False, device="cpu"):
-        t = Tensor(np.eye(n, dtype=np.float32), requires_grad=requires_grad)
-        return t.to(device) if device != "cpu" else t
+    def eye(n, requires_grad=False):
+        return Tensor(np.eye(n, dtype=np.float32), requires_grad=requires_grad)
 
     # arithmetic ops
 

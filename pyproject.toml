@@ -15,7 +15,6 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-cuda = ["cupy-cuda12x"]
 viz = ["graphviz"]
 docs = [
     "mkdocs-material",
@@ -25,4 +24,4 @@ app = [
     "streamlit",
     "pandas",
 ]
-all = ["minitorch[cuda,docs,app,viz]"]
+all = ["minitorch[docs,app,viz]"]

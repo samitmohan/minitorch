@@ -1,6 +1,5 @@
 import math
 import numpy as np
-from .backend import get_array_module
 
 
 class Optimizer:
@@ -48,7 +47,6 @@ class Adam(Optimizer):
         for i, p in enumerate(self.params):
             if not p.requires_grad or p.grad is None:
                 continue
-            xp = get_array_module(p.data)
             grad = p.grad.copy()
             if self.weight_decay:
                 grad = grad + self.weight_decay * p.data
@@ -56,7 +54,7 @@ class Adam(Optimizer):
             self.v[i] = self.beta2 * self.v[i] + (1 - self.beta2) * (grad * grad)
             m_hat = self.m[i] / (1 - self.beta1 ** self.t)
             v_hat = self.v[i] / (1 - self.beta2 ** self.t)
-            p.data -= self.lr * m_hat / (xp.sqrt(v_hat) + self.eps)
+            p.data -= self.lr * m_hat / (np.sqrt(v_hat) + self.eps)
 
 
 def clip_grad_norm(params, max_norm):

@@ -15,7 +15,6 @@ A PyTorch clone I built from scratch to learn how autograd and neural networks w
 - Cross-entropy, MSE, and binary cross-entropy loss
 - Numerical gradient checking with finite differences
 - Computation graph visualization, DataLoader, gradient clipping
-- Optional CUDA via CuPy
 
 ## Results
 

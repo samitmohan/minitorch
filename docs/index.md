@@ -22,7 +22,6 @@ It has:
 - MSE, cross-entropy, and binary cross-entropy loss
 - Computation graph visualization with graphviz
 - DataLoader, gradient clipping, numerical gradient checking
-- Optional CUDA support via CuPy
 
 ---
 
@@ -39,7 +38,6 @@ Optional extras:
 ```bash
 uv pip install -e ".[docs]"   # mkdocs
 uv pip install -e ".[app]"    # streamlit
-uv pip install -e ".[cuda]"   # cupy (needs CUDA 12.x)
 uv pip install -e ".[all]"    # everything
 ```
 
@@ -123,7 +121,6 @@ minitorch/
     functional.py   # stateless activation functions
     viz.py          # computation graph visualization
     data.py         # DataLoader
-    backend.py      # CPU/CUDA switching
     grad_check.py   # numerical gradient verification
     transformer.py  # GPT-style transformer (attention, blocks)
 ```

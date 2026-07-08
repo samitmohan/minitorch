@@ -7,7 +7,6 @@ from .loss import mse_loss, cross_entropy_loss, bce_loss
 from .optim import SGD, Adam, clip_grad_norm, clip_grad_value, StepLR, CosineAnnealingLR
 from .data import DataLoader
 from .grad_check import check_gradient, numerical_gradient
-from .backend import gpu_available
 from .viz import draw_graph
 from . import functional as F
 
@@ -23,7 +22,6 @@ __all__ = [
     "StepLR", "CosineAnnealingLR",
     "DataLoader",
     "check_gradient", "numerical_gradient",
-    "gpu_available",
     "draw_graph",
     "F",
 ]
