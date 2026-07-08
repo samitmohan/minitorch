@@ -4,8 +4,6 @@ A PyTorch clone I built from scratch to learn how autograd and neural networks w
 
 [Docs](https://samitmohan.github.io/minitorch/)
 
-[![CI](https://github.com/samitmohan/minitorch/actions/workflows/ci.yml/badge.svg)](https://github.com/samitmohan/minitorch/actions/workflows/ci.yml)
-
 ## What's in here
 
 - Reverse-mode autograd with an iterative topological sort (handles deep graphs)
@@ -15,7 +13,7 @@ A PyTorch clone I built from scratch to learn how autograd and neural networks w
 - A GPT-style transformer (multi-head attention, causal masking) trained on character-level text
 - SGD (momentum) and Adam; StepLR and CosineAnnealingLR schedulers
 - Cross-entropy, MSE, and binary cross-entropy loss
-- Numerical gradient checking and gradient-parity tests against PyTorch
+- Numerical gradient checking with finite differences
 - Computation graph visualization, DataLoader, gradient clipping
 - Optional CUDA via CuPy
 
@@ -39,12 +37,6 @@ it, and fortunately was just in time to seee it pop down a large rabbit-hole und
 hedered tofer feet, for it flashed acrosss
 her mind that she had never before seen a r
 ```
-
-## Matches PyTorch
-
-`tests/test_torch_parity.py` checks per-op gradients (matmul, conv2d, batchnorm, layernorm, softmax, cross-entropy, activations) against `torch.autograd`. For a full run, `parity_demo.py` trains the same MLP in both frameworks from identical weights. The loss curves stay within 3e-8 of each other over 100 epochs:
-
-![minitorch vs pytorch](assets/parity_mlp.png)
 
 ## How autograd works
 
@@ -96,12 +88,6 @@ uv run python mnist_example.py --model cnn --epochs 10 --n-train 2000
 
 # character-level transformer
 uv run python char_transformer.py --iters 2000 --plot loss.png
-
-# minitorch vs pytorch, same MLP and init
-uv run --extra dev python parity_demo.py --plot parity.png
-
-# tests (includes PyTorch gradient-parity suite)
-uv run --extra dev pytest tests/ -v
 
 # streamlit playground
 uv run --extra app streamlit run app.py

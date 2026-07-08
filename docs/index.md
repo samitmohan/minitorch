@@ -1,5 +1,3 @@
-[![CI](https://github.com/samitmohan/minitorch/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/samitmohan/minitorch/actions/workflows/ci.yml)
-
 # MiniTorch
 
 > A PyTorch clone built from scratch to understand how autograd and neural networks actually work.
@@ -39,7 +37,6 @@ uv pip install -e .
 Optional extras:
 
 ```bash
-uv pip install -e ".[dev]"    # pytest
 uv pip install -e ".[docs]"   # mkdocs
 uv pip install -e ".[app]"    # streamlit
 uv pip install -e ".[cuda]"   # cupy (needs CUDA 12.x)
@@ -95,24 +92,6 @@ uv run --extra app streamlit run app.py
 
 ---
 
-## Tests
-
-```bash
-# all tests
-uv run --extra dev pytest tests/ -v
-
-# just gradient checks
-uv run --extra dev pytest tests/test_gradients.py -v
-
-# just tensor ops
-uv run --extra dev pytest tests/test_tensor_ops.py -v
-
-# gradient parity against PyTorch
-uv run --extra dev pytest tests/test_torch_parity.py -v
-```
-
----
-
 ## Docs
 
 To serve these docs locally:
@@ -146,8 +125,5 @@ minitorch/
     data.py         # DataLoader
     backend.py      # CPU/CUDA switching
     grad_check.py   # numerical gradient verification
-tests/
-    test_tensor_ops.py
-    test_gradients.py
-    test_new_features.py
+    transformer.py  # GPT-style transformer (attention, blocks)
 ```

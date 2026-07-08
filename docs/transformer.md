@@ -69,12 +69,3 @@ def forward(self, x):
 
 The engine differentiates matmul, softmax, and transpose, so attention needs no
 custom gradient.
-
-## Correctness
-
-Batched matmul, layernorm, softmax, and cross-entropy each have a gradient-parity
-test against PyTorch in `tests/test_torch_parity.py`. The transformer has an
-overfit test (`tests/test_transformer.py`) that drives loss down on a fixed
-batch. For a full training run, `parity_demo.py` trains the same MLP in minitorch
-and PyTorch from identical weights and confirms the loss curves stay within 3e-8
-of each other.

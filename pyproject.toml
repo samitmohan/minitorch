@@ -17,11 +17,6 @@ dependencies = [
 [project.optional-dependencies]
 cuda = ["cupy-cuda12x"]
 viz = ["graphviz"]
-dev = [
-    "pytest",
-    "pytest-xdist",
-    "torch",
-]
 docs = [
     "mkdocs-material",
     "mkdocs-git-revision-date-localized-plugin",
@@ -30,7 +25,4 @@ app = [
     "streamlit",
     "pandas",
 ]
-all = ["minitorch[cuda,dev,docs,app,viz]"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
+all = ["minitorch[cuda,docs,app,viz]"]
