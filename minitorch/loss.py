@@ -4,6 +4,7 @@ from . import functional as F
 
 
 def mse_loss(input, target):
+    """Mean squared error between predictions and targets."""
     return ((input - target) ** 2).mean()
 
 
@@ -14,6 +15,7 @@ def bce_loss(input, target):
 
 
 def cross_entropy_loss(input, target):
+    """Softmax cross-entropy. `target` may be class indices or one-hot rows."""
     if target.data.ndim == 1 or (target.data.ndim == 2 and target.data.shape[1] == 1):
         labels = target.data.flatten().astype(np.int64)
         one_hot = np.zeros((input.data.shape[0], input.data.shape[1]), dtype=np.float32)

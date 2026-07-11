@@ -1,76 +1,46 @@
 # Layers
 
-All layers inherit from `Module` and implement `forward()`.
+Every layer subclasses `Module`. Activations are also available as plain
+functions under `minitorch.functional` (aliased as `F`).
 
-## `Linear(in_features, out_features, bias=True, init='kaiming')`
+## Linear
 
-Fully-connected layer. Supports two weight initialization schemes:
+::: minitorch.layers.Linear
 
-- `init='kaiming'` (default) - good for ReLU networks: `scale = sqrt(2 / fan_in)`
-- `init='xavier'` - good for sigmoid/tanh networks: `scale = sqrt(2 / (fan_in + fan_out))`
+## Activations
 
-```python
-from minitorch import Linear
+::: minitorch.layers.ReLU
 
-# default kaiming init (for ReLU nets)
-fc = Linear(784, 128)
+::: minitorch.layers.GELU
 
-# xavier init (for sigmoid/tanh nets)
-fc = Linear(784, 128, init='xavier')
-```
+::: minitorch.layers.Sigmoid
 
-## `ReLU()`
+::: minitorch.layers.Tanh
 
-Rectified Linear Unit: `max(0, x)`.
+::: minitorch.layers.Softmax
 
-## `Sigmoid()`
+## Normalization and regularization
 
-Logistic sigmoid: `1 / (1 + exp(-x))`.
+::: minitorch.layers.BatchNorm1d
 
-## `Tanh()`
+::: minitorch.layers.LayerNorm
 
-Hyperbolic tangent: values in (-1, 1).
+::: minitorch.layers.Dropout
 
-## `Softmax(axis=-1)`
+## Embedding
 
-Softmax activation with proper Jacobian backward.
+::: minitorch.layers.Embedding
 
-```python
-from minitorch import Softmax
-sm = Softmax()
-probs = sm(logits)  # sums to 1 along last axis
-```
+## Convolution
 
-## `Dropout(p=0.5)`
+::: minitorch.conv.Conv2d
 
-Randomly zeros elements during training, scales by `1/(1-p)`. Passthrough during eval.
+::: minitorch.conv.MaxPool2d
 
-## `BatchNorm1d(num_features, eps=1e-5, momentum=0.1)`
+::: minitorch.conv.Flatten
 
-Batch normalization with full backward. Uses running stats in eval mode.
+## Functional
 
-## `Conv2d(in_channels, out_channels, kernel_size, stride=1, padding=0)`
-
-2D convolution using im2col. Kaiming weight initialization.
-
-## `MaxPool2d(kernel_size, stride=None)`
-
-2D max pooling. Vectorized using `as_strided`.
-
-## `Flatten()`
-
-Flattens spatial dimensions: `(N, C, H, W) -> (N, C*H*W)`.
-
-## Functional API
-
-All activations also available as functions:
-
-```python
-import minitorch.functional as F
-
-y = F.relu(x)
-y = F.sigmoid(x)
-y = F.tanh(x)
-y = F.softmax(x, axis=-1)
-y = F.log_softmax(x, axis=-1)
-```
+::: minitorch.functional
+    options:
+      members: [relu, gelu, sigmoid, tanh, softmax, log_softmax]

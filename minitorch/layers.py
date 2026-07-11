@@ -5,6 +5,11 @@ from . import functional as F
 
 
 class Linear(Module):
+    """Fully-connected layer `y = x @ W + b`.
+
+    Weights use Kaiming init by default (`init='xavier'` for glorot). Accepts any
+    input shape ending in `in_features`.
+    """
     def __init__(self, in_features, out_features, bias=True, init='kaiming'):
         super().__init__()
         assert in_features > 0 and out_features > 0, "features must be positive"
@@ -33,21 +38,25 @@ class Linear(Module):
 
 
 class ReLU(Module):
+    """Rectified linear unit, `max(0, x)`."""
     def forward(self, x):
         return F.relu(x)
 
 
 class Sigmoid(Module):
+    """Logistic sigmoid, `1 / (1 + e**-x)`."""
     def forward(self, x):
         return F.sigmoid(x)
 
 
 class Tanh(Module):
+    """Hyperbolic tangent."""
     def forward(self, x):
         return F.tanh(x)
 
 
 class Softmax(Module):
+    """Softmax over `axis`, turning logits into a probability distribution."""
     def __init__(self, axis=-1):
         super().__init__()
         self.axis = axis
@@ -96,6 +105,10 @@ class Embedding(Module):
 
 
 class Dropout(Module):
+    """Zero each activation with probability `p` during training, scaling the rest.
+
+    A no-op in eval mode (`module.eval()`).
+    """
     def __init__(self, p=0.5):
         super().__init__()
         assert 0.0 <= p < 1.0, "dropout probability must be in [0, 1)"
@@ -119,6 +132,10 @@ class Dropout(Module):
 
 
 class BatchNorm1d(Module):
+    """Normalize a `(batch, features)` input per feature, with learnable scale/shift.
+
+    Tracks running mean and variance for use at eval time.
+    """
     def __init__(self, num_features, eps=1e-5, momentum=0.1):
         super().__init__()
         assert num_features > 0, "num_features must be positive"

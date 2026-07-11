@@ -34,6 +34,19 @@ def _accum_grad(tensor, grad):
 
 
 class Tensor:
+    """An n-dimensional array that records operations for reverse-mode autodiff.
+
+    Wraps a NumPy array. When `requires_grad=True`, every operation builds a node
+    in the computation graph; calling `.backward()` on a scalar walks that graph
+    in reverse and fills in `.grad` on the leaves.
+
+    ```python
+    x = Tensor([1.0, 2.0, 3.0], requires_grad=True)
+    y = (x ** 2).sum()
+    y.backward()
+    x.grad  # array([2., 4., 6.])
+    ```
+    """
     def __init__(self, data, *, requires_grad=False):
         if isinstance(data, np.ndarray):
             self.data = data if data.dtype in (np.float32, np.float64) else data.astype(np.float32)
@@ -212,6 +225,7 @@ class Tensor:
     # reduction ops
 
     def sum(self, axis=None, keepdims=False):
+        """Sum over `axis` (or all elements). Differentiable."""
         data = self.data.sum(axis=axis, keepdims=keepdims)
         out = Tensor(data, requires_grad=self.requires_grad and _grad_enabled)
 
@@ -228,6 +242,7 @@ class Tensor:
         return out
 
     def mean(self, axis=None, keepdims=False):
+        """Mean over `axis` (or all elements). Differentiable."""
         data = self.data.mean(axis=axis, keepdims=keepdims)
         out = Tensor(data, requires_grad=self.requires_grad and _grad_enabled)
 
@@ -300,6 +315,7 @@ class Tensor:
     # shape ops
 
     def reshape(self, *shape):
+        """Return a view with a new shape. Differentiable."""
         data = self.data.reshape(*shape)
         out = Tensor(data, requires_grad=self.requires_grad and _grad_enabled)
 
@@ -313,6 +329,7 @@ class Tensor:
         return out
 
     def transpose(self, dim0=-2, dim1=-1):
+        """Swap two axes (last two by default). Differentiable."""
         axes = list(range(self.data.ndim))
         axes[dim0], axes[dim1] = axes[dim1], axes[dim0]
         data = self.data.transpose(axes)
@@ -372,6 +389,7 @@ class Tensor:
     # elementwise ops
 
     def exp(self):
+        """Elementwise `e ** x`. Differentiable."""
         out = Tensor(np.exp(self.data), requires_grad=self.requires_grad and _grad_enabled)
 
         def _backward():
@@ -433,6 +451,7 @@ class Tensor:
     # autograd
 
     def backward(self):
+        """Run reverse-mode autodiff from this scalar, filling `.grad` on every leaf."""
         assert self.data.size == 1, "backward() only works on scalar tensors - call .sum() or .mean() first"
         if self.grad is None:
             self.grad = np.ones_like(self.data)
@@ -461,9 +480,11 @@ class Tensor:
         self.grad = None
 
     def detach(self):
+        """Return a tensor sharing this data but cut out of the graph."""
         return Tensor(self.data, requires_grad=False)
 
     def clone(self):
+        """Return a copy of this tensor's data, keeping `requires_grad`."""
         return Tensor(self.data.copy(), requires_grad=self.requires_grad)
 
     def __repr__(self):
@@ -479,6 +500,7 @@ class Tensor:
 # free functions
 
 def cat(tensors, axis=0):
+    """Concatenate tensors along an existing axis. Differentiable."""
     data = np.concatenate([t.data for t in tensors], axis=axis)
     any_grad = any(t.requires_grad for t in tensors)
     out = Tensor(data, requires_grad=any_grad and _grad_enabled)
@@ -497,6 +519,7 @@ def cat(tensors, axis=0):
 
 
 def stack(tensors, axis=0):
+    """Stack tensors along a new axis. Differentiable."""
     data = np.stack([t.data for t in tensors], axis=axis)
     any_grad = any(t.requires_grad for t in tensors)
     out = Tensor(data, requires_grad=any_grad and _grad_enabled)

@@ -3,6 +3,7 @@ from .tensor import Tensor
 
 
 def numerical_gradient(f, inputs, eps=1e-5):
+    """Estimate gradients of `f` w.r.t. each input by central differences."""
     grads = []
     # temporarily convert all inputs to float64 for precision
     orig_data = [inp.data.copy() for inp in inputs]
@@ -38,6 +39,10 @@ def numerical_gradient(f, inputs, eps=1e-5):
 
 
 def check_gradient(f, inputs, eps=1e-5, atol=1e-4, rtol=1e-3):
+    """Compare analytic gradients from backward() against numerical ones.
+
+    Raises AssertionError if any gradient is off beyond the tolerance.
+    """
     for inp in inputs:
         inp.zero_grad()
     loss = f()

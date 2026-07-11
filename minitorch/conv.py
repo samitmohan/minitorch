@@ -43,6 +43,7 @@ def col2im(cols, input_shape, kh, kw, stride, padding):
 
 
 class Conv2d(Module):
+    """2D convolution over `(N, C, H, W)` input, implemented with im2col."""
     def __init__(self, in_channels, out_channels, kernel_size, stride=1, padding=0):
         super().__init__()
         assert in_channels > 0 and out_channels > 0, "channels must be positive"
@@ -95,6 +96,7 @@ class Conv2d(Module):
 
 
 class MaxPool2d(Module):
+    """Max pooling over `(N, C, H, W)` input using strided windows."""
     def __init__(self, kernel_size, stride=None):
         super().__init__()
         self.kernel_size = kernel_size if isinstance(kernel_size, tuple) else (kernel_size, kernel_size)
@@ -142,6 +144,7 @@ class MaxPool2d(Module):
 
 
 class Flatten(Module):
+    """Flatten all dims except the batch dim into one."""
     def __init__(self):
         super().__init__()
 

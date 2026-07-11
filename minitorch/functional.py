@@ -7,6 +7,7 @@ from .tensor import Tensor, _accum_grad
 
 
 def relu(x):
+    """Rectified linear unit, `max(0, x)`."""
     data = np.maximum(0, x.data)
     out = Tensor(data, requires_grad=x.requires_grad)
 
@@ -21,6 +22,7 @@ def relu(x):
 
 
 def sigmoid(x):
+    """Logistic sigmoid, `1 / (1 + e**-x)`."""
     s = 1.0 / (1.0 + np.exp(-x.data))
     out = Tensor(s, requires_grad=x.requires_grad)
 
@@ -35,6 +37,7 @@ def sigmoid(x):
 
 
 def tanh(x):
+    """Hyperbolic tangent."""
     t = np.tanh(x.data)
     out = Tensor(t, requires_grad=x.requires_grad)
 
@@ -49,14 +52,15 @@ def tanh(x):
 
 
 def gelu(x):
-    # tanh approximation (same one GPT-2 uses); built from tensor ops so autograd
-    # differentiates it for free
+    """Gaussian error linear unit (tanh approximation, as in GPT-2)."""
+    # built from tensor ops so autograd differentiates it for free
     c = math.sqrt(2.0 / math.pi)
     inner = (x + x ** 3 * 0.044715) * c
     return x * 0.5 * (tanh(inner) + 1.0)
 
 
 def softmax(x, axis=-1):
+    """Softmax over `axis`. Numerically stable via max-subtraction."""
     shifted = x.data - x.data.max(axis=axis, keepdims=True)
     exps = np.exp(shifted)
     s = exps / exps.sum(axis=axis, keepdims=True)
@@ -75,6 +79,7 @@ def softmax(x, axis=-1):
 
 
 def log_softmax(x, axis=-1):
+    """Log of softmax over `axis`. More stable than `softmax(x).log()`."""
     shifted = x.data - x.data.max(axis=axis, keepdims=True)
     log_sum_exp = np.log(np.exp(shifted).sum(axis=axis, keepdims=True))
     data = shifted - log_sum_exp

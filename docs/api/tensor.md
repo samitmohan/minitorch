@@ -1,69 +1,17 @@
 # Tensor
 
-The core `Tensor` class wraps a NumPy array and tracks gradients for backpropagation.
+The core array type and the autograd engine. Arithmetic operators (`+`, `-`,
+`*`, `/`, `**`, `@`) are overloaded and differentiable; the named methods below
+cover reductions, shape ops, and elementwise math.
 
-## Constructor
+::: minitorch.tensor.Tensor
 
-```python
-Tensor(data, requires_grad=False)
-```
+## no_grad
 
-## Properties
+::: minitorch.tensor.no_grad
 
-- `shape`, `ndim`, `dtype` - standard array properties
-- `T` - transpose (swaps last two dims)
-- `size(dim=None)` - total elements or size of a specific dimension
+## Free functions
 
-## Static Constructors
+::: minitorch.tensor.cat
 
-```python
-Tensor.zeros(2, 3)
-Tensor.ones(2, 3, requires_grad=True)
-Tensor.randn(4, 5)
-Tensor.eye(3)
-```
-
-## Arithmetic
-
-`+`, `-`, `*`, `/`, `**` with broadcasting. Right-hand variants (`5.0 + tensor`) supported. `@` for matrix multiplication.
-
-## Reductions
-
-- `sum(axis, keepdims)`, `mean(axis, keepdims)`
-- `max(axis, keepdims)`, `min(axis, keepdims)`
-- `var(axis, keepdims)`, `std(axis, keepdims)`
-
-## Shape Operations
-
-- `reshape(*shape)`, `transpose(dim0, dim1)`
-- `squeeze(axis)`, `unsqueeze(axis)`
-- `__getitem__` for indexing/slicing
-
-## Elementwise
-
-- `exp()`, `log()`, `abs()`, `clamp(min_val, max_val)`
-
-## Autograd
-
-- `backward()` - reverse-mode autodiff (scalar tensors only)
-- `zero_grad()`, `detach()`, `clone()`
-
-## no_grad Context Manager
-
-Disable gradient tracking for inference:
-
-```python
-from minitorch import no_grad
-
-with no_grad():
-    y = model(x)  # no gradients tracked
-```
-
-## Free Functions
-
-```python
-from minitorch import cat, stack
-
-c = cat([a, b], axis=0)
-s = stack([a, b], axis=0)
-```
+::: minitorch.tensor.stack

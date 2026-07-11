@@ -15,6 +15,12 @@ def _dedup(params):
 
 
 class Module:
+    """Base class for layers and models.
+
+    Subclass it and implement `forward`. Any `Tensor` or `Module` assigned as an
+    attribute is discovered automatically by `parameters()`, `state_dict()`, and
+    the `train`/`eval` switches.
+    """
     def __init__(self):
         self._training = True
 
@@ -25,6 +31,7 @@ class Module:
         return self.forward(*args, **kwargs)
 
     def parameters(self):
+        """Collect every trainable `Tensor` in this module and its children."""
         params = []
         for val in self.__dict__.values():
             if isinstance(val, Tensor) and val.requires_grad:
@@ -112,6 +119,7 @@ class Module:
 
 
 class Sequential(Module):
+    """Chain modules so the output of each feeds the next."""
     def __init__(self, *layers):
         super().__init__()
         self.layers = list(layers)

@@ -19,6 +19,7 @@ viz = ["graphviz"]
 docs = [
     "mkdocs-material",
     "mkdocs-git-revision-date-localized-plugin",
+    "mkdocstrings[python]",
 ]
 app = [
     "streamlit",

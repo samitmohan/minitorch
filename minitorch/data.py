@@ -2,6 +2,7 @@ import numpy as np
 
 
 class DataLoader:
+    """Iterate over `(x, y)` in mini-batches, optionally shuffling each epoch."""
     def __init__(self, x, y, batch_size=32, shuffle=True, drop_last=False):
         self.x = x
         self.y = y
