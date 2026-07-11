@@ -2,6 +2,8 @@
 
 A PyTorch clone I built from scratch to learn how autograd and neural networks work under the hood. It runs reverse-mode autodiff on NumPy and adds a module system, conv nets, and a GPT-style transformer that all share one autograd core.
 
+The whole thing is ~1200 lines of NumPy (run `python sz.py` for the breakdown); the autograd engine is ~410. It's meant to be read: see the [reading guide](https://samitmohan.github.io/minitorch/reading-guide/).
+
 [Docs](https://samitmohan.github.io/minitorch/)
 
 ## What's in here

@@ -119,7 +119,11 @@ class Module:
 
 
 class Sequential(Module):
-    """Chain modules so the output of each feeds the next."""
+    """Chain modules so the output of each feeds the next.
+
+    Parameter collection, train/eval, and state_dict all come from Module, which
+    already walks the `layers` list.
+    """
     def __init__(self, *layers):
         super().__init__()
         self.layers = list(layers)
@@ -128,43 +132,3 @@ class Sequential(Module):
         for layer in self.layers:
             x = layer(x)
         return x
-
-    def parameters(self):
-        params = []
-        for layer in self.layers:
-            if hasattr(layer, 'parameters'):
-                params.extend(layer.parameters())
-        return _dedup(params)
-
-    def train(self):
-        self._training = True
-        for layer in self.layers:
-            if isinstance(layer, Module):
-                layer.train()
-        return self
-
-    def eval(self):
-        self._training = False
-        for layer in self.layers:
-            if isinstance(layer, Module):
-                layer.eval()
-        return self
-
-    def state_dict(self):
-        state = {}
-        for i, layer in enumerate(self.layers):
-            if hasattr(layer, 'state_dict'):
-                for k, v in layer.state_dict().items():
-                    state[f"layers.{i}.{k}"] = v
-        return state
-
-    def load_state_dict(self, state):
-        for i, layer in enumerate(self.layers):
-            if hasattr(layer, 'load_state_dict'):
-                child_state = {}
-                prefix = f"layers.{i}."
-                for k, v in state.items():
-                    if k.startswith(prefix):
-                        child_state[k[len(prefix):]] = v
-                if child_state:
-                    layer.load_state_dict(child_state)
