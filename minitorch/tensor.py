@@ -453,8 +453,6 @@ class Tensor:
     def backward(self):
         """Run reverse-mode autodiff from this scalar, filling `.grad` on every leaf."""
         assert self.data.size == 1, "backward() only works on scalar tensors - call .sum() or .mean() first"
-        if self.grad is None:
-            self.grad = np.ones_like(self.data)
 
         # iterative post-order DFS so deep graphs don't blow the recursion limit
         topo = []
@@ -473,7 +471,21 @@ class Tensor:
                 if child not in visited:
                     stack.append((child, False))
 
+        # Intermediate .grad is scratch space for one sweep. Left in place, a
+        # second backward() accumulates on top of it and inflates every leaf.
+        for node in topo:
+            if node._prev and node is not self:
+                node.grad = None
+
+        if self.grad is None:
+            self.grad = np.ones_like(self.data)
+
         for node in reversed(topo):
+            # A node built under no_grad has requires_grad=False so it never
+            # receives a gradient, but its inputs may still require one. Its
+            # closure would dereference out.grad = None.
+            if node.grad is None:
+                continue
             node._backward()
 
     def zero_grad(self):
@@ -484,8 +496,20 @@ class Tensor:
         return Tensor(self.data, requires_grad=False)
 
     def clone(self):
-        """Return a copy of this tensor's data, keeping `requires_grad`."""
-        return Tensor(self.data.copy(), requires_grad=self.requires_grad)
+        """Return a copy of this tensor's data that stays attached to the graph.
+
+        Use `detach()` to cut the graph instead.
+        """
+        out = Tensor(self.data.copy(), requires_grad=self.requires_grad)
+
+        def _backward():
+            if self.requires_grad:
+                _accum_grad(self, out.grad)
+
+        out._backward = _backward
+        out._prev = {self}
+        out._op = 'clone'
+        return out
 
     def __repr__(self):
         return f"Tensor(data={self.data}, grad={self.grad})"

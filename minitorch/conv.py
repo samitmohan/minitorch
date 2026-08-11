@@ -73,7 +73,12 @@ class Conv2d(Module):
         cols = im2col(x.data, kh, kw, self.stride, self.padding)
         out_data = cols @ self.weight.data.T + self.bias.data
         out_data = out_data.reshape(N, OH, OW, self.out_channels).transpose(0, 3, 1, 2)
-        out = Tensor(out_data, requires_grad=x.requires_grad or self.weight.requires_grad)
+        out = Tensor(
+            out_data,
+            # Bias counts too: a frozen-weight, trainable-bias conv would
+            # otherwise emit an output with no graph attached.
+            requires_grad=x.requires_grad or self.weight.requires_grad or self.bias.requires_grad,
+        )
 
         def _backward():
             dout = out.grad.transpose(0, 2, 3, 1).reshape(-1, self.out_channels)

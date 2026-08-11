@@ -41,7 +41,10 @@ def build_cnn():
     )
 
 
-def run_mnist_example(model_type="mlp", n_train=10000, n_test=2000, epochs=15, batch_size=100, lr=0.001):
+def run_mnist_example(model_type="mlp", n_train=10000, n_test=2000, epochs=15, batch_size=100, lr=0.001, seed=0):
+    # Only the split was pinned before, so weight init, batch shuffling and
+    # dropout all varied run to run and the reported accuracy moved with them.
+    np.random.seed(seed)
     print("Fetching MNIST data...")
     mnist = fetch_openml('mnist_784', version=1, as_frame=False, parser='liac-arff')
     X = mnist.data.astype(np.float32) / 255.0

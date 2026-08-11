@@ -83,6 +83,11 @@ class Module:
         for name, val in self.__dict__.items():
             if isinstance(val, Tensor) and val.requires_grad:
                 state[name] = val.data.copy()
+            elif isinstance(val, np.ndarray):
+                # BatchNorm running_mean/running_var are plain arrays, not
+                # parameters. Omitting them makes a reloaded model normalize
+                # with (0, 1) in eval mode.
+                state[name] = val.copy()
             elif isinstance(val, Module):
                 for k, v in val.state_dict().items():
                     state[f"{name}.{k}"] = v
@@ -98,6 +103,9 @@ class Module:
             if isinstance(val, Tensor) and val.requires_grad:
                 if name in state:
                     val.data = state[name].copy()
+            elif isinstance(val, np.ndarray):
+                if name in state:
+                    setattr(self, name, state[name].copy())
             elif isinstance(val, Module):
                 child_state = {}
                 prefix = f"{name}."

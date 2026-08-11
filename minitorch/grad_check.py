@@ -1,5 +1,4 @@
 import numpy as np
-from .tensor import Tensor
 
 
 def numerical_gradient(f, inputs, eps=1e-5):
