@@ -1,0 +1,17 @@
+{
+ "questions": 200,
+ "paragraphs": 2067,
+ "k": 3,
+ "recall_at_1": 0.73,
+ "recall_at_3": 0.915,
+ "closed_exact": 0.0,
+ "closed_f1": 0.0853,
+ "closed_contains": 0.03,
+ "rag_exact": 0.205,
+ "rag_f1": 0.4001,
+ "rag_contains": 0.55,
+ "index_seconds": 362.6,
+ "query_embed_ms": 61.3,
+ "closed_answer_s": 0.48,
+ "rag_answer_s": 1.53
+}

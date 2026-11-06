@@ -1,0 +1,137 @@
+{
+ "model": "Qwen3-0.6B",
+ "device": "Apple M4 GPU",
+ "group": 64,
+ "window": 512,
+ "tokens_per_text": 6144,
+ "bandwidth_gb_s": 100.4,
+ "rows": [
+  {
+   "precision": "bfloat16",
+   "weight_mb": 1192.0,
+   "decode_ms_per_token": 24.7,
+   "decode_tokens_per_s": 40.5,
+   "ceiling_tokens_per_s": 84.2,
+   "perplexity": {
+    "gsm8k": 4.269,
+    "tinystories": 10.576
+   }
+  },
+  {
+   "precision": "int8",
+   "weight_mb": 633.2,
+   "decode_ms_per_token": 27.8,
+   "decode_tokens_per_s": 35.9,
+   "ceiling_tokens_per_s": 158.5,
+   "perplexity": {
+    "gsm8k": 4.281,
+    "tinystories": 10.582
+   },
+   "decode_ms_per_token_mlx_kernel": 27.5
+  },
+  {
+   "precision": "int4",
+   "weight_mb": 335.2,
+   "decode_ms_per_token": 20.9,
+   "decode_tokens_per_s": 47.9,
+   "ceiling_tokens_per_s": 299.4,
+   "perplexity": {
+    "gsm8k": 5.094,
+    "tinystories": 14.263
+   },
+   "decode_ms_per_token_mlx_kernel": 19.9
+  }
+ ],
+ "kernels": [
+  {
+   "matrix": "output head",
+   "impl": "bfloat16",
+   "us": 3297.2,
+   "gb_s": 94.4
+  },
+  {
+   "matrix": "output head",
+   "impl": "int8 minitorch",
+   "us": 1820.1,
+   "gb_s": 90.8
+  },
+  {
+   "matrix": "output head",
+   "impl": "int8 MLX",
+   "us": 1619.7,
+   "gb_s": 102.1
+  },
+  {
+   "matrix": "output head",
+   "impl": "int4 minitorch",
+   "us": 888.3,
+   "gb_s": 98.5
+  },
+  {
+   "matrix": "output head",
+   "impl": "int4 MLX",
+   "us": 868.8,
+   "gb_s": 100.7
+  },
+  {
+   "matrix": "feed-forward up",
+   "impl": "bfloat16",
+   "us": 57.0,
+   "gb_s": 110.3
+  },
+  {
+   "matrix": "feed-forward up",
+   "impl": "int8 minitorch",
+   "us": 38.7,
+   "gb_s": 86.4
+  },
+  {
+   "matrix": "feed-forward up",
+   "impl": "int8 MLX",
+   "us": 28.3,
+   "gb_s": 118.1
+  },
+  {
+   "matrix": "feed-forward up",
+   "impl": "int4 minitorch",
+   "us": 23.7,
+   "gb_s": 74.6
+  },
+  {
+   "matrix": "feed-forward up",
+   "impl": "int4 MLX",
+   "us": 18.9,
+   "gb_s": 93.6
+  },
+  {
+   "matrix": "feed-forward down",
+   "impl": "bfloat16",
+   "us": 60.6,
+   "gb_s": 103.9
+  },
+  {
+   "matrix": "feed-forward down",
+   "impl": "int8 minitorch",
+   "us": 34.1,
+   "gb_s": 98.1
+  },
+  {
+   "matrix": "feed-forward down",
+   "impl": "int8 MLX",
+   "us": 31.2,
+   "gb_s": 107.2
+  },
+  {
+   "matrix": "feed-forward down",
+   "impl": "int4 minitorch",
+   "us": 23.9,
+   "gb_s": 74.1
+  },
+  {
+   "matrix": "feed-forward down",
+   "impl": "int4 MLX",
+   "us": 22.1,
+   "gb_s": 80.1
+  }
+ ]
+}

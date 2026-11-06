@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: uv sync --group dev --extra serve
+      - name: Lint
+        run: uv run ruff check minitorch tests bench scripts examples apps train_gpt.py train_lora.py train_grpo.py test_grads.py
+      - name: Gradient checks (finite differences)
+        run: uv run python test_grads.py
+      - name: PyTorch parity (ops, layers, attention, optimizers)
+        run: uv run python tests/parity.py
+      - name: Tokenizer (tiktoken parity, round trips, trainer vs naive)
+        run: uv run python tests/tokenizer.py
+      - name: Serving (paged KV accounting, continuous batching)
+        run: uv run python tests/serve.py
+      - name: LoRA (only the adapter trains, merging is exact)
+        run: uv run python tests/lora.py
+      - name: GRPO (batched sampling across prompt lengths, advantages, the update)
+        run: uv run python tests/grpo.py
+      - name: Speculative decoding (greedy equals the target's, samples follow its distribution)
+        run: uv run python tests/speculative.py
+      - name: Activation checkpointing (same loss and gradients)
+        run: uv run python tests/checkpoint.py
+      - name: CS336 ablation switches (each variant trains; SiLU matches SwiGLU's size)
+        run: uv run python tests/ablations.py
+      - name: Agent calculator (arithmetic works, model-written text never runs as code)
+        run: uv run python tests/agent.py
+      - name: Mixed precision (16-bit multiplies, float32 weights and gradients)
+        run: uv run python tests/mixed_precision.py
+
+  ui:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ui
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build

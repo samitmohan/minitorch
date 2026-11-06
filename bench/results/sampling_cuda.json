@@ -1,0 +1,12 @@
+{
+ "device": "cuda",
+ "draws": 20480,
+ "differ_from_exact": {
+  "first_crossing": 2,
+  "count_below": 714
+ },
+ "of_which_below_1e-6": {
+  "first_crossing": 1,
+  "count_below": 621
+ }
+}

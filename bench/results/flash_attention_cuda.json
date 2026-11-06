@@ -1,0 +1,78 @@
+{
+ "device": "NVIDIA GeForce RTX 3090",
+ "dtype": "float32 (TF32 matmuls)",
+ "rows": [
+  {
+   "shape": "CS336 training",
+   "B": 32,
+   "H": 16,
+   "Hkv": 16,
+   "T": 256,
+   "S": 256,
+   "D": 32,
+   "impl": "composed",
+   "forward_ms": 2.767,
+   "forward_backward_ms": 6.477
+  },
+  {
+   "shape": "CS336 training",
+   "B": 32,
+   "H": 16,
+   "Hkv": 16,
+   "T": 256,
+   "S": 256,
+   "D": 32,
+   "impl": "Triton",
+   "forward_ms": 0.156,
+   "forward_backward_ms": 0.764
+  },
+  {
+   "shape": "prefill 1k",
+   "B": 4,
+   "H": 16,
+   "Hkv": 8,
+   "T": 1024,
+   "S": 1024,
+   "D": 64,
+   "impl": "composed",
+   "forward_ms": 5.725,
+   "forward_backward_ms": 13.68
+  },
+  {
+   "shape": "prefill 1k",
+   "B": 4,
+   "H": 16,
+   "Hkv": 8,
+   "T": 1024,
+   "S": 1024,
+   "D": 64,
+   "impl": "Triton",
+   "forward_ms": 0.405,
+   "forward_backward_ms": 1.983
+  },
+  {
+   "shape": "Qwen3 prefill 2k",
+   "B": 1,
+   "H": 16,
+   "Hkv": 8,
+   "T": 2048,
+   "S": 2048,
+   "D": 128,
+   "impl": "composed",
+   "forward_ms": 6.324,
+   "forward_backward_ms": 15.053
+  },
+  {
+   "shape": "Qwen3 prefill 2k",
+   "B": 1,
+   "H": 16,
+   "Hkv": 8,
+   "T": 2048,
+   "S": 2048,
+   "D": 128,
+   "impl": "Triton",
+   "forward_ms": 0.874,
+   "forward_backward_ms": 4.052
+  }
+ ]
+}

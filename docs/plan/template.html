@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>minitorch Plan</title>
+<style>
+:root {
+  --bg: #fbfaf7; --fg: #1d1d1b; --muted: #6b6a66; --card: #ffffff; --line: #e4e1da;
+  --accent: #2f9e44; --accent-soft: #e6f4e8; --blue: #1971c2; --code: #f1efe9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161615; --fg: #ecebe6; --muted: #a3a19a; --card: #20201e; --line: #34332f;
+    --accent: #51cf66; --accent-soft: #1f3324; --blue: #74c0fc; --code: #2a2a27;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161615; --fg: #ecebe6; --muted: #a3a19a; --card: #20201e; --line: #34332f;
+  --accent: #51cf66; --accent-soft: #1f3324; --blue: #74c0fc; --code: #2a2a27;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif; }
+code { font: 0.88em ui-monospace, "SF Mono", Menlo, monospace; background: var(--code);
+  padding: 1px 5px; border-radius: 4px; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 16px 80px; }
+header h1 { margin: 0 0 4px; font-size: 30px; letter-spacing: -0.02em; }
+header p { margin: 0; color: var(--muted); max-width: 760px; }
+.rules { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 26px; }
+.rules span { font-size: 13px; border: 1px solid var(--line); background: var(--card);
+  padding: 4px 10px; border-radius: 999px; }
+.progress { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--muted); }
+.bar { flex: 1; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+nav { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin: 18px 0; }
+nav button { all: unset; cursor: pointer; border: 1px solid var(--line); background: var(--card);
+  border-radius: 10px; padding: 10px 12px; font-size: 13px; line-height: 1.3; }
+nav button b { display: block; font-size: 12px; color: var(--muted); font-weight: 600; }
+nav button.on { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+nav button.done b::after { content: "  done"; color: var(--accent); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 24px; }
+.phase { color: var(--accent); font-size: 13px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .04em; }
+h2 { margin: 2px 0 10px; font-size: 24px; }
+.why { font-size: 17px; max-width: 820px; }
+figure { margin: 18px 0; }
+.dia { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 8px;
+  overflow: hidden; }
+.dia img { width: 100%; height: auto; display: block; }
+figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; display: flex;
+  justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+figcaption a { color: var(--blue); }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 8px; }
+.grid h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted);
+  margin: 12px 0 6px; }
+ul { margin: 0; padding-left: 20px; }
+li { margin: 4px 0; }
+.check li { list-style: none; margin-left: -20px; }
+.check label { display: flex; gap: 8px; cursor: pointer; }
+.check input { margin-top: 6px; accent-color: var(--accent); }
+.math { margin-top: 16px; background: var(--accent-soft); border-radius: 10px; padding: 12px 16px;
+  font-size: 15px; }
+.own { margin: 18px 0; }
+.own h3 { margin: 0 0 10px; font-size: 16px; }
+.own table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.own th { text-align: left; color: var(--muted); font-size: 12px; text-transform: uppercase;
+  letter-spacing: .05em; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.own td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.own td:first-child { color: var(--accent); }
+.pager { display: flex; justify-content: space-between; margin-top: 18px; }
+.pager button { all: unset; cursor: pointer; color: var(--blue); font-size: 14px; }
+.pager button[disabled] { visibility: hidden; }
+.hint { font-size: 12px; color: var(--muted); text-align: center; margin-top: 10px; }
+@media (max-width: 760px) {
+  nav { grid-template-columns: repeat(3, 1fr); }
+  .grid { grid-template-columns: 1fr; }
+  .card { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>minitorch: the plan</h1>
+    <p>The goal is to prove I can write every fundamental of a modern LLM stack myself,
+      then wire it into one end-to-end system: from a BPE tokenizer and autograd, through
+      Metal kernels and real Qwen3 weights, to a paged-KV inference server that a RAG app
+      and an agent call. Six milestones, one per phase of the study plan. The diagram
+      grows with each one, and green marks what that milestone adds.</p>
+  </header>
+  <div class="rules">
+    <span>Metal only: NumPy + MLX</span>
+    <span>No CUDA, no Triton (ruff TID251 blocks the imports)</span>
+    <span>Every milestone ends on a measured number</span>
+    <span>Read, close the tab, build, then diff</span>
+  </div>
+  <section class="card own">
+    <h3>What I write vs what I use</h3>
+    <table>
+      <tr><th>Mine, from scratch</th><th>Borrowed, and only for this</th></tr>
+      <tr><td>Autograd, every gradient, all layers, optimizers</td><td>NumPy and MLX as array storage and kernel launch</td></tr>
+      <tr><td>BPE tokenizer, safetensors parser, sampling</td><td>Hugging Face checkpoints (the weights only)</td></tr>
+      <tr><td>FlashAttention and paged-attention Metal kernels</td><td><code>mx.fast.*</code> as a correctness and speed oracle, never in the product path</td></tr>
+      <tr><td>LoRA, int8/int4 quantization</td><td>PyTorch as the test oracle in <code>tests/parity.py</code></td></tr>
+      <tr><td>KV cache manager, scheduler, engine, HTTP server</td><td>FastAPI for HTTP parsing</td></tr>
+      <tr><td>RAG pipeline and agent loop</td><td>An embedding model for retrieval</td></tr>
+    </table>
+  </section>
+  <div class="progress"><span id="ptext">0 / 0 checks</span><div class="bar"><i id="pbar"></i></div></div>
+  <nav id="nav"></nav>
+  <section class="card" id="card"></section>
+  <div class="pager"><button id="prev">&larr; previous</button><button id="next">next &rarr;</button></div>
+  <div class="hint">Arrow keys switch milestones. Checkboxes save in this browser.</div>
+  <section class="card own">
+    <h3>Every milestone, every time</h3>
+    <ul>
+      <li><code>test_grads.py</code> and <code>tests/parity.py</code> pass in CI before the milestone counts</li>
+      <li><code>bench/</code> regenerates the README tables, and nobody copies numbers by hand</li>
+      <li>One blog post ships, linked from the README</li>
+      <li>Commit messages say what changed and why</li>
+      <li>The mkdocs site and <code>app.py</code> stay frozen until the capstone</li>
+      <li>Open item: rename the project. "minitorch" collides with Cornell's course and an existing PyPI package</li>
+    </ul>
+  </section>
+</div>
+<script>
+/*DATA*/
+const KEY = "minitorch-plan-v2";
+let state = {};
+try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { state = {}; }
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+const fromHash = parseInt((location.hash.match(/^#m(\d)$/) || [])[1]);
+let cur = Math.min(Math.max(fromHash || state.cur || 1, 1), M.length);
+
+const li = items => items.map(x => `<li>${x}</li>`).join("");
+const checks = m => m.done.map((x, i) => {
+  const id = `m${m.n}-${i}`;
+  return `<li><label><input type="checkbox" data-id="${id}" ${state[id] ? "checked" : ""}><span>${x}</span></label></li>`;
+}).join("");
+const dl = (b64, name) =>
+  `<a download="${name}.excalidraw" href="data:application/json;base64,${b64}">download .excalidraw</a> (open at excalidraw.com to edit)`;
+const isDone = m => m.done.every((_, i) => state[`m${m.n}-${i}`]);
+
+function renderNav() {
+  document.getElementById("nav").innerHTML = M.map(m =>
+    `<button class="${m.n === cur ? "on" : ""} ${isDone(m) ? "done" : ""}" data-n="${m.n}"><b>M${m.n}</b>${m.title}</button>`
+  ).join("");
+  const total = M.reduce((a, m) => a + m.done.length, 0);
+  const got = M.reduce((a, m) => a + m.done.filter((_, i) => state[`m${m.n}-${i}`]).length, 0);
+  document.getElementById("ptext").textContent = `${got} / ${total} checks`;
+  document.getElementById("pbar").style.width = `${100 * got / total}%`;
+}
+
+function render() {
+  const m = M[cur - 1];
+  document.getElementById("card").innerHTML = `
+    <div class="phase">${m.phase}</div>
+    <h2>M${m.n}. ${m.title}</h2>
+    <p class="why">${m.why}</p>
+    <figure><div class="dia">${m.svg}</div>
+      <figcaption><span>The framework after M${m.n}. Green is new in this step.</span>${dl(m.scene, "m" + m.n)}</figcaption></figure>
+    ${m.kv ? `<figure><div class="dia">${KV.svg}</div>
+      <figcaption><span>The core idea of the KV cache manager.</span>${dl(KV.scene, "paged-kv")}</figcaption></figure>` : ""}
+    <div class="grid">
+      <div><h3>Build</h3><ul>${li(m.build)}</ul>
+        <h3>Read alongside</h3><ul>${li(m.read)}</ul></div>
+      <div><h3>From the study plan</h3><ul>${li(m.study)}</ul>
+        <h3>Done when</h3><ul class="check">${checks(m)}</ul>
+        <h3>Blog posts</h3><ul>${li(m.blog.map(b => `<i>${b}</i>`))}</ul></div>
+    </div>
+    ${m.extra}`;
+  document.getElementById("prev").disabled = cur === 1;
+  document.getElementById("next").disabled = cur === M.length;
+  state.cur = cur; save(); renderNav();
+  history.replaceState(null, "", "#m" + cur);
+}
+
+const go = n => { if (n >= 1 && n <= M.length) { cur = n; render(); window.scrollTo({ top: 0, behavior: "smooth" }); } };
+document.getElementById("nav").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (b) go(+b.dataset.n);
+});
+document.getElementById("card").addEventListener("change", e => {
+  if (e.target.dataset.id) { state[e.target.dataset.id] = e.target.checked; save(); renderNav(); }
+});
+document.getElementById("prev").onclick = () => go(cur - 1);
+document.getElementById("next").onclick = () => go(cur + 1);
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowLeft") go(cur - 1);
+  if (e.key === "ArrowRight") go(cur + 1);
+});
+render();
+</script>
+</body>
+</html>

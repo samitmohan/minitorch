@@ -29,3 +29,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# datasets, training runs, downloaded weights
+data/
+runs/
+*.safetensors

@@ -1,0 +1,159 @@
+{
+ "device": "cuda",
+ "batch": 32,
+ "context": 256,
+ "step_ms": 69.0,
+ "profiled_ms": 76.9,
+ "rows": [
+  {
+   "op": "Matmul backward",
+   "calls": 29,
+   "ms": 22.381
+  },
+  {
+   "op": "Matmul",
+   "calls": 29,
+   "ms": 10.181
+  },
+  {
+   "op": "Mul backward",
+   "calls": 87,
+   "ms": 7.782
+  },
+  {
+   "op": "Mul",
+   "calls": 88,
+   "ms": 4.924
+  },
+  {
+   "op": "Add",
+   "calls": 35,
+   "ms": 3.182
+  },
+  {
+   "op": "Attention backward",
+   "calls": 4,
+   "ms": 2.951
+  },
+  {
+   "op": "Add backward",
+   "calls": 35,
+   "ms": 2.134
+  },
+  {
+   "op": "Index backward",
+   "calls": 18,
+   "ms": 1.998
+  },
+  {
+   "op": "Sigmoid",
+   "calls": 4,
+   "ms": 1.779
+  },
+  {
+   "op": "Sigmoid backward",
+   "calls": 4,
+   "ms": 1.746
+  },
+  {
+   "op": "Expand backward",
+   "calls": 19,
+   "ms": 1.732
+  },
+  {
+   "op": "Reshape backward",
+   "calls": 84,
+   "ms": 1.648
+  },
+  {
+   "op": "Sum",
+   "calls": 11,
+   "ms": 0.877
+  },
+  {
+   "op": "Exp",
+   "calls": 1,
+   "ms": 0.789
+  },
+  {
+   "op": "Exp backward",
+   "calls": 1,
+   "ms": 0.782
+  },
+  {
+   "op": "Permute backward",
+   "calls": 16,
+   "ms": 0.745
+  },
+  {
+   "op": "Attention",
+   "calls": 4,
+   "ms": 0.731
+  },
+  {
+   "op": "Reshape",
+   "calls": 84,
+   "ms": 0.592
+  },
+  {
+   "op": "Cat",
+   "calls": 8,
+   "ms": 0.591
+  },
+  {
+   "op": "Pow backward",
+   "calls": 9,
+   "ms": 0.474
+  },
+  {
+   "op": "Max",
+   "calls": 1,
+   "ms": 0.417
+  },
+  {
+   "op": "Index",
+   "calls": 18,
+   "ms": 0.284
+  },
+  {
+   "op": "Pow",
+   "calls": 9,
+   "ms": 0.219
+  },
+  {
+   "op": "Expand",
+   "calls": 19,
+   "ms": 0.116
+  },
+  {
+   "op": "Cat backward",
+   "calls": 8,
+   "ms": 0.102
+  },
+  {
+   "op": "Permute",
+   "calls": 16,
+   "ms": 0.076
+  },
+  {
+   "op": "Sum backward",
+   "calls": 11,
+   "ms": 0.065
+  },
+  {
+   "op": "Log",
+   "calls": 1,
+   "ms": 0.022
+  },
+  {
+   "op": "Log backward",
+   "calls": 1,
+   "ms": 0.016
+  },
+  {
+   "op": "between ops",
+   "calls": 0,
+   "ms": 7.6
+  }
+ ]
+}

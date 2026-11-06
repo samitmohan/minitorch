@@ -1,0 +1,52 @@
+{
+ "config": {
+  "vocab_size": 1000,
+  "context_length": 64,
+  "d_model": 128,
+  "n_layers": 2,
+  "n_heads": 4,
+  "d_ff": 384
+ },
+ "batch": 8,
+ "steps": 20,
+ "trials": 5,
+ "primitives": 20,
+ "rows": [
+  {
+   "device": "cpu",
+   "mode": "eager",
+   "ms_per_step": 10.01
+  },
+  {
+   "device": "cpu",
+   "mode": "lazy",
+   "ms_per_step": 10.04
+  },
+  {
+   "device": "cpu",
+   "mode": "both",
+   "loss_gap_eager_lazy": 0.0,
+   "loss_gap_eager_eager": 0.0,
+   "ops_recorded_per_step": 178,
+   "ops_run_per_step": 178
+  },
+  {
+   "device": "metal",
+   "mode": "eager",
+   "ms_per_step": 4.09
+  },
+  {
+   "device": "metal",
+   "mode": "lazy",
+   "ms_per_step": 4.8
+  },
+  {
+   "device": "metal",
+   "mode": "both",
+   "loss_gap_eager_lazy": 4.76837158203125e-07,
+   "loss_gap_eager_eager": 4.76837158203125e-07,
+   "ops_recorded_per_step": 178,
+   "ops_run_per_step": 178
+  }
+ ]
+}

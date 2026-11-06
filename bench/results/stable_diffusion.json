@@ -1,0 +1,102 @@
+{
+ "prompt": "a watercolor painting of a lighthouse on a cliff at dusk",
+ "steps": 25,
+ "guidance": 7.5,
+ "size": 512,
+ "dtype": "float32",
+ "minitorch_metal_s_per_step": 2.579,
+ "diffusers_mps_s_per_step": 1.161,
+ "max_pixel_gap": 0.0134,
+ "mean_pixel_gap": 2e-05,
+ "pixels_off_by_more_than_1_of_255": 0.0001,
+ "unet_profile": {
+  "wall_ms": 4063.5,
+  "rows": [
+   {
+    "op": "Attention",
+    "calls": 256,
+    "ms": 1214.36
+   },
+   {
+    "op": "Im2col",
+    "calls": 98,
+    "ms": 756.13
+   },
+   {
+    "op": "Matmul",
+    "calls": 282,
+    "ms": 685.66
+   },
+   {
+    "op": "Mul",
+    "calls": 869,
+    "ms": 527.0
+   },
+   {
+    "op": "Add",
+    "calls": 733,
+    "ms": 425.42
+   },
+   {
+    "op": "Where",
+    "calls": 32,
+    "ms": 97.81
+   },
+   {
+    "op": "Pow",
+    "calls": 218,
+    "ms": 70.47
+   },
+   {
+    "op": "Sum",
+    "calls": 218,
+    "ms": 57.87
+   },
+   {
+    "op": "Reshape",
+    "calls": 898,
+    "ms": 44.46
+   },
+   {
+    "op": "Recip",
+    "calls": 125,
+    "ms": 39.14
+   },
+   {
+    "op": "Cat",
+    "calls": 44,
+    "ms": 31.04
+   },
+   {
+    "op": "Sigmoid",
+    "calls": 68,
+    "ms": 25.39
+   },
+   {
+    "op": "Index",
+    "calls": 800,
+    "ms": 20.61
+   },
+   {
+    "op": "Exp",
+    "calls": 16,
+    "ms": 19.65
+   },
+   {
+    "op": "Permute",
+    "calls": 356,
+    "ms": 9.95
+   },
+   {
+    "op": "Expand",
+    "calls": 3,
+    "ms": 0.06
+   },
+   {
+    "op": "between ops",
+    "calls": 0,
+    "ms": 38.52
+   }
+  ]
+ }
+}

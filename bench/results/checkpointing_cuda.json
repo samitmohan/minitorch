@@ -1,0 +1,54 @@
+{
+ "device": "cuda",
+ "examples": 8,
+ "tokens": 1279,
+ "rows": [
+  {
+   "checkpointing": false,
+   "micro": 1,
+   "peak_gb": 6.13,
+   "seconds_per_batch": 1.58
+  },
+  {
+   "checkpointing": false,
+   "micro": 2,
+   "peak_gb": 10.0,
+   "seconds_per_batch": 0.79
+  },
+  {
+   "checkpointing": false,
+   "micro": 4,
+   "peak_gb": 15.16,
+   "seconds_per_batch": 0.4
+  },
+  {
+   "checkpointing": false,
+   "micro": 8,
+   "out_of_memory": true
+  },
+  {
+   "checkpointing": true,
+   "micro": 1,
+   "peak_gb": 4.29,
+   "seconds_per_batch": 2.53
+  },
+  {
+   "checkpointing": true,
+   "micro": 2,
+   "peak_gb": 5.01,
+   "seconds_per_batch": 1.25
+  },
+  {
+   "checkpointing": true,
+   "micro": 4,
+   "peak_gb": 5.2,
+   "seconds_per_batch": 0.64
+  },
+  {
+   "checkpointing": true,
+   "micro": 8,
+   "peak_gb": 5.23,
+   "seconds_per_batch": 0.42
+  }
+ ]
+}

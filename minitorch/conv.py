@@ -1,45 +1,7 @@
 import numpy as np
-from .tensor import Tensor, _accum_grad
+
 from .module import Module
-
-
-def im2col(input_data, kh, kw, stride, padding):
-    N, C, H, W = input_data.shape
-    if padding > 0:
-        input_data = np.pad(input_data, ((0, 0), (0, 0), (padding, padding), (padding, padding)))
-    _, _, H_pad, W_pad = input_data.shape
-    OH = (H_pad - kh) // stride + 1
-    OW = (W_pad - kw) // stride + 1
-
-    cols = np.zeros((N, C, kh, kw, OH, OW), dtype=input_data.dtype)
-    for y in range(kh):
-        y_max = y + stride * OH
-        for x in range(kw):
-            x_max = x + stride * OW
-            cols[:, :, y, x, :, :] = input_data[:, :, y:y_max:stride, x:x_max:stride]
-
-    return cols.transpose(0, 4, 5, 1, 2, 3).reshape(N * OH * OW, -1)
-
-
-def col2im(cols, input_shape, kh, kw, stride, padding):
-    N, C, H, W = input_shape
-    H_pad = H + 2 * padding
-    W_pad = W + 2 * padding
-    OH = (H_pad - kh) // stride + 1
-    OW = (W_pad - kw) // stride + 1
-
-    cols = cols.reshape(N, OH, OW, C, kh, kw).transpose(0, 3, 4, 5, 1, 2)
-    img = np.zeros((N, C, H_pad, W_pad), dtype=cols.dtype)
-
-    for y in range(kh):
-        y_max = y + stride * OH
-        for x in range(kw):
-            x_max = x + stride * OW
-            img[:, :, y:y_max:stride, x:x_max:stride] += cols[:, :, y, x, :, :]
-
-    if padding > 0:
-        return img[:, :, padding:-padding, padding:-padding]
-    return img
+from .tensor import Tensor
 
 
 class Conv2d(Module):
@@ -65,43 +27,19 @@ class Conv2d(Module):
 
     def forward(self, x):
         assert x.data.ndim == 4, f"Conv2d expects 4D input (N,C,H,W), got {x.data.ndim}D"
-        N, C, H, W = x.data.shape
+        N, _, H, W = x.data.shape
         kh, kw = self.kernel_size
         OH = (H + 2 * self.padding - kh) // self.stride + 1
         OW = (W + 2 * self.padding - kw) // self.stride + 1
 
-        cols = im2col(x.data, kh, kw, self.stride, self.padding)
-        out_data = cols @ self.weight.data.T + self.bias.data
-        out_data = out_data.reshape(N, OH, OW, self.out_channels).transpose(0, 3, 1, 2)
-        out = Tensor(
-            out_data,
-            # Bias counts too: a frozen-weight, trainable-bias conv would
-            # otherwise emit an output with no graph attached.
-            requires_grad=x.requires_grad or self.weight.requires_grad or self.bias.requires_grad,
-        )
-
-        def _backward():
-            dout = out.grad.transpose(0, 2, 3, 1).reshape(-1, self.out_channels)
-
-            if self.weight.requires_grad:
-                _accum_grad(self.weight, dout.T @ cols)
-
-            if self.bias.requires_grad:
-                _accum_grad(self.bias, dout.sum(axis=0))
-
-            if x.requires_grad:
-                dcols = dout @ self.weight.data
-                dx = col2im(dcols, x.data.shape, kh, kw, self.stride, self.padding)
-                _accum_grad(x, dx)
-
-        out._backward = _backward
-        out._prev = {x, self.weight, self.bias}
-        out._op = 'conv2d'
-        return out
+        # every output pixel is one patch row dotted with every filter
+        cols = x.im2col(kh, kw, self.stride, self.padding)    # (N*OH*OW, C*kh*kw)
+        out = cols @ self.weight.T + self.bias               # (N*OH*OW, out_channels)
+        return out.reshape(N, OH, OW, self.out_channels).permute(0, 3, 1, 2)
 
 
 class MaxPool2d(Module):
-    """Max pooling over `(N, C, H, W)` input using strided windows."""
+    """Max pooling over `(N, C, H, W)` input: im2col, then max over each patch."""
     def __init__(self, kernel_size, stride=None):
         super().__init__()
         self.kernel_size = kernel_size if isinstance(kernel_size, tuple) else (kernel_size, kernel_size)
@@ -111,41 +49,12 @@ class MaxPool2d(Module):
         assert x.data.ndim == 4, f"MaxPool2d expects 4D input (N,C,H,W), got {x.data.ndim}D"
         N, C, H, W = x.data.shape
         kh, kw = self.kernel_size
-        s = self.stride
-        OH = (H - kh) // s + 1
-        OW = (W - kw) // s + 1
+        OH = (H - kh) // self.stride + 1
+        OW = (W - kw) // self.stride + 1
 
-        # vectorized: use as_strided to extract all patches at once
-        strides = x.data.strides
-        patches = np.lib.stride_tricks.as_strided(
-            x.data,
-            shape=(N, C, OH, OW, kh, kw),
-            strides=(strides[0], strides[1], strides[2] * s, strides[3] * s, strides[2], strides[3])
-        )
-        out_data = patches.max(axis=(4, 5))
-        out = Tensor(out_data, requires_grad=x.requires_grad)
-
-        # stash patches for backward
-        saved_patches = patches.copy()
-
-        def _backward():
-            if x.requires_grad:
-                if x.grad is None:
-                    x.grad = np.zeros_like(x.data)
-                max_vals = out.data[:, :, :, :, None, None]
-                mask = (saved_patches == max_vals).astype(np.float32)
-                mask_sum = mask.sum(axis=(4, 5), keepdims=True)
-                mask = mask / np.maximum(mask_sum, 1.0)
-                weighted = mask * out.grad[:, :, :, :, None, None]
-                # scatter back
-                for i in range(kh):
-                    for j in range(kw):
-                        x.grad[:, :, i:i+s*OH:s, j:j+s*OW:s] += weighted[:, :, :, :, i, j]
-
-        out._backward = _backward
-        out._prev = {x}
-        out._op = 'maxpool2d'
-        return out
+        cols = x.im2col(kh, kw, self.stride, 0)              # (N*OH*OW, C*kh*kw)
+        out = cols.reshape(N, OH, OW, C, kh * kw).max(axis=-1)
+        return out.permute(0, 3, 1, 2)
 
 
 class Flatten(Module):

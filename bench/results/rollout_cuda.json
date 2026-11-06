@@ -1,0 +1,33 @@
+{
+ "device": "cuda",
+ "decode_steps_timed": 64,
+ "rows": [
+  {
+   "rows": 1,
+   "prompt_tokens": 73,
+   "prefill_ms": 162.3,
+   "decode_ms_per_step": 79.0,
+   "tokens_per_s": 12.7
+  },
+  {
+   "rows": 8,
+   "prompt_tokens": 140,
+   "prefill_ms": 175.1,
+   "decode_ms_per_step": 83.9,
+   "tokens_per_s": 95.3
+  },
+  {
+   "rows": 64,
+   "prompt_tokens": 149,
+   "prefill_ms": 563.8,
+   "decode_ms_per_step": 86.4,
+   "tokens_per_s": 740.4
+  }
+ ],
+ "step_ms_64_rows": {
+  "model": 84.3,
+  "logits_to_host": 5.4,
+  "sample_on_host": 98.5,
+  "sample_on_device": 1.2
+ }
+}

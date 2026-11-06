@@ -1,0 +1,22 @@
+{
+ "prompt_tokens": 15,
+ "largest_logit": 196.87881469726562,
+ "params": 124439808,
+ "greedy_tokens": 40,
+ "logits": [
+  {
+   "device": "cpu",
+   "max_gap": 0.0001373291015625,
+   "relative_gap": 6.97531127326557e-07,
+   "argmax_agree": 1.0,
+   "greedy_match": true
+  },
+  {
+   "device": "metal",
+   "max_gap": 0.00022125244140625,
+   "relative_gap": 1.123800149581675e-06,
+   "argmax_agree": 1.0,
+   "greedy_match": true
+  }
+ ]
+}

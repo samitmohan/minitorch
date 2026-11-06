@@ -1,0 +1,141 @@
+{
+ "machine": "x86_64",
+ "platform": "Linux-5.15.0-139-generic-x86_64-with-glibc2.31",
+ "numpy": "2.4.3",
+ "elementwise": [
+  {
+   "device": "cuda",
+   "path": "raw",
+   "n": 1000,
+   "us_per_op": 11.34
+  },
+  {
+   "device": "cuda",
+   "path": "sync every op",
+   "n": 1000,
+   "us_per_op": 34.96
+  },
+  {
+   "device": "cuda",
+   "path": "minitorch",
+   "n": 1000,
+   "us_per_op": 41.89
+  },
+  {
+   "device": "cuda",
+   "path": "raw",
+   "n": 10000,
+   "us_per_op": 11.21
+  },
+  {
+   "device": "cuda",
+   "path": "sync every op",
+   "n": 10000,
+   "us_per_op": 32.26
+  },
+  {
+   "device": "cuda",
+   "path": "minitorch",
+   "n": 10000,
+   "us_per_op": 39.48
+  },
+  {
+   "device": "cuda",
+   "path": "raw",
+   "n": 100000,
+   "us_per_op": 11.23
+  },
+  {
+   "device": "cuda",
+   "path": "sync every op",
+   "n": 100000,
+   "us_per_op": 32.29
+  },
+  {
+   "device": "cuda",
+   "path": "minitorch",
+   "n": 100000,
+   "us_per_op": 39.54
+  },
+  {
+   "device": "cuda",
+   "path": "raw",
+   "n": 1000000,
+   "us_per_op": 11.59
+  },
+  {
+   "device": "cuda",
+   "path": "sync every op",
+   "n": 1000000,
+   "us_per_op": 33.05
+  },
+  {
+   "device": "cuda",
+   "path": "minitorch",
+   "n": 1000000,
+   "us_per_op": 39.96
+  },
+  {
+   "device": "cuda",
+   "path": "raw",
+   "n": 10000000,
+   "us_per_op": 97.71
+  },
+  {
+   "device": "cuda",
+   "path": "sync every op",
+   "n": 10000000,
+   "us_per_op": 120.1
+  },
+  {
+   "device": "cuda",
+   "path": "minitorch",
+   "n": 10000000,
+   "us_per_op": 99.69
+  }
+ ],
+ "matmul": [
+  {
+   "device": "cuda",
+   "dtype": "tf32",
+   "n": 256,
+   "tflops": 0.91
+  },
+  {
+   "device": "cuda",
+   "dtype": "tf32",
+   "n": 512,
+   "tflops": 7.247
+  },
+  {
+   "device": "cuda",
+   "dtype": "tf32",
+   "n": 1024,
+   "tflops": 21.066
+  },
+  {
+   "device": "cuda",
+   "dtype": "tf32",
+   "n": 2048,
+   "tflops": 30.115
+  },
+  {
+   "device": "cuda",
+   "dtype": "tf32",
+   "n": 4096,
+   "tflops": 33.934
+  }
+ ],
+ "train_step": [
+  {
+   "impl": "minitorch",
+   "device": "cuda",
+   "precision": "tf32",
+   "batch": 32,
+   "ms": 90.9,
+   "tokens_per_s": 90145,
+   "tflops": 9.507
+  }
+ ],
+ "gpu": "NVIDIA GeForce RTX 3090"
+}

@@ -12,17 +12,36 @@ dependencies = [
     "numpy",
     "matplotlib",
     "scikit-learn",
+    "regex",
 ]
 
 [project.optional-dependencies]
-viz = ["graphviz"]
+metal = ["mlx"]
+cuda = ["cupy-cuda13x[ctk]", "triton; sys_platform == 'linux'"]
+serve = ["fastapi", "uvicorn"]
 docs = [
     "mkdocs-material",
     "mkdocs-git-revision-date-localized-plugin",
     "mkdocstrings[python]",
 ]
-app = [
-    "streamlit",
-    "pandas",
+
+[tool.ruff.lint]
+extend-select = ["TID251", "E701", "E702", "E703", "E731"]  # no code golf: one statement per line, no assigned lambdas
+
+[dependency-groups]
+dev = [
+    "torch",
+    "tiktoken",
+    "transformers",
+    "huggingface_hub",
+    "ruff",
+    "diffusers>=0.41.0",
 ]
-all = ["minitorch[docs,app,viz]"]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+# CuPy is an array backend for training throughput. Custom kernels are Metal (mx.fast.metal_kernel)
+# on the Mac and Triton on NVIDIA, never CuPy's raw kernel APIs.
+"cupy.RawKernel".msg = "Custom kernels are Metal or Triton: use mx.fast.metal_kernel or a @triton.jit kernel."
+"cupy.RawModule".msg = "Custom kernels are Metal or Triton: use mx.fast.metal_kernel or a @triton.jit kernel."
+"cupy.ElementwiseKernel".msg = "Custom kernels are Metal or Triton: use mx.fast.metal_kernel or a @triton.jit kernel."
+"cupy.ReductionKernel".msg = "Custom kernels are Metal or Triton: use mx.fast.metal_kernel or a @triton.jit kernel."

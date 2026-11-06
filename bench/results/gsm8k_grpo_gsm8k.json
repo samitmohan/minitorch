@@ -1,0 +1,15 @@
+{
+ "name": "grpo_gsm8k",
+ "adapter": "runs/grpo_gsm8k/adapter.npz",
+ "n": 250,
+ "correct": 139,
+ "accuracy": 0.556,
+ "device": "metal",
+ "dtype": "bfloat16",
+ "max_new": 320,
+ "prompt": "{question}\nSolve it step by step, then give the final answer on its own line as: #### <number>",
+ "new_tokens": 54041,
+ "seconds": 3029.1,
+ "tokens_per_s": 17.8,
+ "hit_token_limit": 29
+}

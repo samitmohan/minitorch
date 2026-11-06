@@ -1,0 +1,8 @@
+{
+ "first": "gsm8k_base",
+ "second": "gsm8k_agent",
+ "n": 250,
+ "fixed": 7,
+ "broke": 117,
+ "p_value": 0.0
+}

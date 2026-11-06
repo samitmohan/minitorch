@@ -1,0 +1,14 @@
+{
+ "name": "agent",
+ "n": 250,
+ "correct": 42,
+ "accuracy": 0.168,
+ "tool_calls": 440,
+ "problems_using_tool": 248,
+ "model_calls": 500,
+ "model_seconds": 911.9,
+ "tool_seconds": 0.018,
+ "prompt_tokens": 155000,
+ "reply_tokens": 13657,
+ "seconds": 912.0
+}

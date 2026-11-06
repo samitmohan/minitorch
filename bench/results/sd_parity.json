@@ -1,0 +1,13 @@
+{
+ "tokenizer_prompts": 5,
+ "ddim_step_error": 2.6226043701171875e-06,
+ "clip_params": 123060480,
+ "clip_cpu": 5.624492018796445e-07,
+ "clip_metal": 6.922451802893193e-07,
+ "unet_params": 859520964,
+ "unet_cpu": 8.406712368014269e-06,
+ "unet_metal": 4.515836280916119e-06,
+ "vae_params": 49490199,
+ "vae_cpu": 2.968699618577375e-06,
+ "vae_metal": 3.4124743706342997e-06
+}

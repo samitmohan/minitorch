@@ -1,0 +1,15 @@
+{
+ "name": "base",
+ "adapter": null,
+ "n": 250,
+ "correct": 152,
+ "accuracy": 0.608,
+ "device": "metal",
+ "dtype": "bfloat16",
+ "max_new": 320,
+ "prompt": "{question}\nSolve it step by step, then give the final answer on its own line as: #### <number>",
+ "new_tokens": 53261,
+ "seconds": 2271.9,
+ "tokens_per_s": 23.4,
+ "hit_token_limit": 45
+}

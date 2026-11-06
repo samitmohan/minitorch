@@ -1,0 +1,15 @@
+{
+ "name": "lora_gsm8k_f64",
+ "adapter": "runs/lora_gsm8k_f64/adapter.npz",
+ "n": 250,
+ "correct": 124,
+ "accuracy": 0.496,
+ "device": "metal",
+ "dtype": "bfloat16",
+ "max_new": 320,
+ "prompt": "{question}\nSolve it step by step, then give the final answer on its own line as: #### <number>",
+ "new_tokens": 22766,
+ "seconds": 893.6,
+ "tokens_per_s": 25.5,
+ "hit_token_limit": 8
+}

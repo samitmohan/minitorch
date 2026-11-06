@@ -1,0 +1,16 @@
+{
+  "plugins": [],
+  "categories": {
+    "correctness": "off"
+  },
+  "rules": {
+    "no-sequences": [
+      "error",
+      {
+        "allowInParentheses": false
+      }
+    ],
+    "no-unused-expressions": "error",
+    "no-nested-ternary": "error"
+  }
+}

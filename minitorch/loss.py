@@ -1,6 +1,7 @@
 import numpy as np
-from .tensor import Tensor
+
 from . import functional as F
+from .tensor import Tensor
 
 
 def mse_loss(input, target):
@@ -15,13 +16,16 @@ def bce_loss(input, target):
 
 
 def cross_entropy_loss(input, target):
-    """Softmax cross-entropy. `target` may be class indices or one-hot rows."""
-    if target.data.ndim == 1 or (target.data.ndim == 2 and target.data.shape[1] == 1):
-        labels = target.data.flatten().astype(np.int64)
-        one_hot = np.zeros((input.data.shape[0], input.data.shape[1]), dtype=np.float32)
-        one_hot[np.arange(len(labels)), labels] = 1.0
-        target = Tensor(one_hot, requires_grad=False)
+    """Softmax cross-entropy over the last axis, averaged over everything else.
 
-    log_probs = F.log_softmax(input, axis=1)
-    N = input.data.shape[0]
-    return (-log_probs * target).sum() / N
+    `target` holds class indices (shape `input.shape[:-1]`, as an int array or
+    Tensor) or one-hot rows (same shape as `input`).
+    """
+    log_probs = F.log_softmax(input, axis=-1)
+    labels = target.numpy() if isinstance(target, Tensor) else np.asarray(target)
+    if labels.shape == input.shape:
+        return -(log_probs * target).sum() / (input.data.size // input.shape[-1])
+    # pick each row's log-prob at its label (a gather) instead of building a one-hot matrix
+    labels = labels.reshape(-1).astype(np.int64)
+    log_probs = log_probs.reshape(-1, input.shape[-1])
+    return -log_probs[np.arange(len(labels)), labels].mean()

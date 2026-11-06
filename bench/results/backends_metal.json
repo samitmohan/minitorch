@@ -1,0 +1,38 @@
+{
+ "device": "metal",
+ "failed": [],
+ "ops": {
+  "agree": 51,
+  "total": 51
+ },
+ "training": {
+  "steps": 20,
+  "first_loss": 6.3625922203063965,
+  "last_loss": 0.6475239992141724,
+  "max_gap": 4.76837158203125e-07
+ },
+ "decode": {
+  "steps": 4,
+  "max_logit_gap": 1.6987323760986328e-06
+ },
+ "thread": {
+  "ok": true
+ },
+ "mnist": {
+  "steps": 100,
+  "first_loss": 2.4633471965789795,
+  "last_loss": 0.3670739531517029,
+  "max_gap": 2.384185791015625e-07
+ },
+ "bfloat16": {
+  "nodes": 215,
+  "promoted": 0,
+  "relative_logit_gap": 0.013606218621134758,
+  "cast_grad_float32": true
+ },
+ "kernels": {
+  "within_tolerance": 15,
+  "total": 15,
+  "tolerance": 0.0001
+ }
+}

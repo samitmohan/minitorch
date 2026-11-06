@@ -1,0 +1,8 @@
+{
+ "first": "gsm8k_base",
+ "second": "gsm8k_grpo_no_stop",
+ "n": 250,
+ "fixed": 31,
+ "broke": 29,
+ "p_value": 0.8974
+}

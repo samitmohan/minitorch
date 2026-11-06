@@ -1,0 +1,34 @@
+{
+ "device": "cpu",
+ "block_size": 4,
+ "scenarios": [
+  {
+   "scenario": "room for all",
+   "requests": 6,
+   "num_blocks": 64,
+   "max_batch": 8,
+   "steps": 15,
+   "preemptions": 0,
+   "identical": true
+  },
+  {
+   "scenario": "batch cap 2",
+   "requests": 6,
+   "num_blocks": 64,
+   "max_batch": 2,
+   "steps": 27,
+   "preemptions": 0,
+   "identical": true
+  },
+  {
+   "scenario": "tiny KV budget",
+   "requests": 6,
+   "num_blocks": 9,
+   "max_batch": 8,
+   "steps": 27,
+   "preemptions": 3,
+   "identical": true
+  }
+ ],
+ "failed": []
+}

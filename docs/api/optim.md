@@ -12,10 +12,6 @@
 
 ::: minitorch.optim.clip_grad_norm
 
-::: minitorch.optim.clip_grad_value
+## Learning rate schedule
 
-## Learning rate schedulers
-
-::: minitorch.optim.StepLR
-
-::: minitorch.optim.CosineAnnealingLR
+::: minitorch.optim.cosine_lr

@@ -1,0 +1,56 @@
+{
+ "groups": [
+  {
+   "name": "engine",
+   "files": 13,
+   "lines": 1224
+  },
+  {
+   "name": "backends and kernels",
+   "files": 7,
+   "lines": 658
+  },
+  {
+   "name": "models",
+   "files": 9,
+   "lines": 705
+  },
+  {
+   "name": "serving",
+   "files": 5,
+   "lines": 554
+  },
+  {
+   "name": "apps (RAG, agent)",
+   "files": 2,
+   "lines": 243
+  },
+  {
+   "name": "training scripts",
+   "files": 3,
+   "lines": 355
+  },
+  {
+   "name": "examples (GPT-2, Stable Diffusion)",
+   "files": 2,
+   "lines": 537
+  },
+  {
+   "name": "tests",
+   "files": 16,
+   "lines": 1583
+  },
+  {
+   "name": "benchmarks and scripts",
+   "files": 18,
+   "lines": 1329
+  },
+  {
+   "name": "the post (TypeScript)",
+   "files": 26,
+   "lines": 3364
+  }
+ ],
+ "package": 3141,
+ "repository": 10552
+}

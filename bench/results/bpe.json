@@ -1,0 +1,25 @@
+{
+  "bpe_train_seconds": 44.7,
+  "bpe_vocab_size": 10000,
+  "bpe_train_peak_rss_mb_parent": 126,
+  "bpe_train_peak_rss_mb_largest_worker": 547,
+  "bpe_longest_tokens": [
+    " accomplishment",
+    " disappointment",
+    " responsibility",
+    " uncomfortable",
+    " compassionate",
+    " understanding",
+    " neighbourhood",
+    " Unfortunately",
+    " determination",
+    " encouragement"
+  ],
+  "train_tokens": 541229347,
+  "train_encode_mb_per_s": 90.1,
+  "train_bytes_per_token": 4.116,
+  "valid_tokens": 5465883,
+  "valid_encode_mb_per_s": 44.4,
+  "valid_bytes_per_token": 4.117,
+  "valid_round_trip_exact": true
+}

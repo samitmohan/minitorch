@@ -1,0 +1,45 @@
+{
+ "prompt_tokens": 17,
+ "largest_logit": 24.287944793701172,
+ "logits": [
+  {
+   "device": "cpu",
+   "dtype": "float32",
+   "max_gap": 5.054473876953125e-05,
+   "relative_gap": 2.0810628152712002e-06,
+   "argmax_agree": 1.0
+  },
+  {
+   "device": "metal",
+   "dtype": "float32",
+   "max_gap": 9.72747802734375e-05,
+   "relative_gap": 4.0050642859936306e-06,
+   "argmax_agree": 1.0
+  },
+  {
+   "device": "metal",
+   "dtype": "bfloat16",
+   "max_gap": 0.3462185859680176,
+   "relative_gap": 0.014254750202569869,
+   "argmax_agree": 1.0
+  }
+ ],
+ "greedy_tokens": 24,
+ "greedy_match": true,
+ "params": 596049920,
+ "config": {
+  "vocab_size": 151936,
+  "context_length": 40960,
+  "d_model": 1024,
+  "n_layers": 28,
+  "n_heads": 16,
+  "d_ff": 3072,
+  "n_kv_heads": 8,
+  "rope_theta": 1000000,
+  "head_dim": 128,
+  "qk_norm": true,
+  "norm_eps": 1e-06,
+  "tie_embeddings": true
+ },
+ "failed": []
+}
